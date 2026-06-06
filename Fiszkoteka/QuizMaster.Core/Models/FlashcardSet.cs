@@ -18,7 +18,6 @@ namespace QuizMaster.Core.Models
         public DateTime CreatedAt { get; set; }
 
         public ICollection<Flashcard> Flashcards { get; set; }
-
         public FlashcardSet()
         {
             this.Flashcards = new List<Flashcard>();
