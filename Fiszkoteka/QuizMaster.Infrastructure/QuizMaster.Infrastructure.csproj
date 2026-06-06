@@ -7,10 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\QuizMaster.Application\QuizMaster.Application.csproj" />
+    <ProjectReference Include="..\QuizMaster.Contracts\QuizMaster.Contracts.csproj" />
     <ProjectReference Include="..\QuizMaster.Core\QuizMaster.Core.csproj" />
   </ItemGroup>
 

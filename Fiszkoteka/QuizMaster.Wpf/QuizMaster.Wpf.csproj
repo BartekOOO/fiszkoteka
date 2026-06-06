@@ -8,4 +8,10 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QuizMaster.Application\QuizMaster.Application.csproj" />
+    <ProjectReference Include="..\QuizMaster.Contracts\QuizMaster.Contracts.csproj" />
+    <ProjectReference Include="..\QuizMaster.Core\QuizMaster.Core.csproj" />
+  </ItemGroup>
+
 </Project>

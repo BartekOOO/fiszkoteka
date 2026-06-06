@@ -10,4 +10,9 @@
     <Folder Include="Services\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\QuizMaster.Contracts\QuizMaster.Contracts.csproj" />
+    <ProjectReference Include="..\QuizMaster.Core\QuizMaster.Core.csproj" />
+  </ItemGroup>
+
 </Project>
