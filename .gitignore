@@ -12,3 +12,5 @@
 /Fiszkoteka/QuizMaster.Contracts/obj
 /Fiszkoteka/QuizMaster.Core/bin/Debug/net10.0
 /Fiszkoteka/QuizMaster.Wpf/bin/Debug/net10.0-windows
+/Fiszkoteka/QuizMaster.Infrastructure/bin/Debug/net10.0
+/Fiszkoteka/QuizMaster.Infrastructure/obj
