@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="QuizMaster.Core/QuizMaster.Core.csproj" Id="b19318e4-0963-4b85-a46b-6ac2766f6ebd" />
+  <Project Path="QuizMaster.Wpf/QuizMaster.Wpf.csproj" Id="83f09702-3df5-494d-afca-96f88501291e" />
 </Solution>
