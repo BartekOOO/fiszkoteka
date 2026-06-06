@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="QuizMaster.Application/QuizMaster.Application.csproj" Id="b0221263-91af-4f07-9e15-358602028601" />
+  <Project Path="QuizMaster.Contracts/QuizMaster.Contracts.csproj" Id="72759bb9-cdee-4ca1-909b-22a8876ee821" />
   <Project Path="QuizMaster.Core/QuizMaster.Core.csproj" Id="b19318e4-0963-4b85-a46b-6ac2766f6ebd" />
   <Project Path="QuizMaster.Wpf/QuizMaster.Wpf.csproj" Id="83f09702-3df5-494d-afca-96f88501291e" />
 </Solution>
