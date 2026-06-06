@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.5.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\QuizMaster.Application\QuizMaster.Application.csproj" />
     <ProjectReference Include="..\QuizMaster.Contracts\QuizMaster.Contracts.csproj" />
     <ProjectReference Include="..\QuizMaster.Core\QuizMaster.Core.csproj" />
