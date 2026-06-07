@@ -19,7 +19,7 @@ namespace QuizMaster.Wpf.Services
 
         public async Task<AuthResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
         {
-            var response = await _httpClient.PostAsJsonAsync("/api/auth/login", request);
+            var response = await _httpClient.PostAsJsonAsync("/api/auth/login", request, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -38,7 +38,7 @@ namespace QuizMaster.Wpf.Services
 
         public async Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
         {
-            var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request);
+            var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request, cancellationToken);
 
             if (!response.IsSuccessStatusCode)
             {

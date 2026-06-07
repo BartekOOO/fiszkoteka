@@ -149,7 +149,8 @@
 
                     <PasswordBox x:Name="PasswordBox"
                                  Style="{StaticResource InputPasswordBoxStyle}"
-                                 Margin="0,0,0,8"/>
+                                 Margin="0,0,0,8"
+                                 KeyDown="PasswordBox_KeyDown"/>
 
                     <DockPanel Margin="0,0,0,24">
                         <CheckBox Content="Zapamiętaj mnie"
@@ -164,6 +165,7 @@
                     </DockPanel>
 
                     <Button Content="Zaloguj"
+                            x:Name="LoginButton"
                             Style="{StaticResource PrimaryButtonStyle}"
                             Click="LoginButton_Click"/>
 
@@ -176,6 +178,8 @@
 
                         <Button Content=" Zarejestruj się"
                                    Foreground="#2563EB"
+                                    Background="Transparent"
+                                    BorderThickness="0"
                                    FontWeight="SemiBold"
                                    Cursor="Hand" Click="RegisterAccount_Click"
                                    />

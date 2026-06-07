@@ -1,4 +1,5 @@
-﻿using QuizMaster.Wpf.Delegates;
+﻿using QuizMaster.Contracts.Auth;
+using QuizMaster.Wpf.Delegates;
 using QuizMaster.Wpf.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -21,8 +22,6 @@ namespace QuizMaster.Wpf
     {
         private readonly IAuthApiClient _authApiClient;
         private readonly IMessageDialogService _messageDialogService;
-        private string _email;
-        private string _password;
         public event RegistrationFinishedHandler Finished;
         public RegisterWindow(IAuthApiClient authApiClient, IMessageDialogService messageDialogService)
         {
@@ -31,12 +30,14 @@ namespace QuizMaster.Wpf
             _messageDialogService = messageDialogService;
         }
 
-        private void RegisterButton_Click(object sender, RoutedEventArgs e)
+        private async void RegisterButton_Click(object sender, RoutedEventArgs e)
         {
             var username = UsernameTextBox.Text;
-            _email = EmailTextBox.Text;
-            _password = PasswordBox.Password;
+            var email = EmailTextBox.Text;
+            var password = PasswordBox.Password;
             var repeatedPassword = RepeatPasswordBox.Password;
+
+            RegisterButton.IsEnabled = false;
 
             if (string.IsNullOrWhiteSpace(username))
             {
@@ -44,31 +45,51 @@ namespace QuizMaster.Wpf
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(_email))
+            if (string.IsNullOrWhiteSpace(email))
             {
                 ShowError("Podaj adres e-mail.");
                 return;
             }
 
-            if (string.IsNullOrWhiteSpace(_password))
+            if (string.IsNullOrWhiteSpace(password))
             {
                 ShowError("Podaj hasło.");
                 return;
             }
 
-            if (_password != repeatedPassword)
+            if (password != repeatedPassword)
             {
                 ShowError("Hasła nie są takie same.");
                 return;
             }
 
-            // tutaj później wywołasz AuthApiClient.RegisterAsync(...)
+            try
+            {
+                var request = new RegisterRequest()
+                {
+                    Email = email,
+                    UserName = username,
+                    Password = password
+                };
+
+                _ = await _authApiClient.RegisterAsync(request);
+
+                _messageDialogService.ShowSuccess("Komunikat", 
+                    "Pomyślnie zarejestrowano nowego użytkownika");
+
+                this.Finished?.Invoke(email, password);
+            }
+            catch (Exception ex)
+            {
+                ShowError(ex.Message);
+            }
+
+            RegisterButton.IsEnabled = true;
         }
 
         private void BackToLoginButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Finished?.Invoke(_email, _password);
-            Close();
+            this.Finished(null, null);
         }
 
         private void ShowError(string message)

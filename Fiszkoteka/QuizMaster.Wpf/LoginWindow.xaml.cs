@@ -44,6 +44,8 @@ namespace QuizMaster.Wpf
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
+            LoginButton.IsEnabled = false;
+
             try
             {
                 if (string.IsNullOrWhiteSpace(EmailTextBox.Text))
@@ -91,11 +93,31 @@ namespace QuizMaster.Wpf
                     ex.Message,
                     this);
             }
+
+            LoginButton.IsEnabled = true;
         }
 
         private void RegisterAccount_Click(object sender, RoutedEventArgs e)
         {
+            var registerWindow = _serviceProvider.GetRequiredService
+                <RegisterWindow>();
 
+            registerWindow.Finished += (l, p) =>
+            {
+                EmailTextBox.Text = l;
+                PasswordBox.Password = p;
+                registerWindow.Close();
+            };
+
+            registerWindow.ShowDialog();
+        }
+
+        private void PasswordBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                LoginButton_Click(LoginButton, new RoutedEventArgs());
+            }
         }
     }
 }
