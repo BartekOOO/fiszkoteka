@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizMaster.Contracts.Auth;
+using QuizMaster.Contracts.Exceptions;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Core.Models;
 using QuizMaster.Infrastructure.Data;
@@ -31,7 +32,7 @@ namespace QuizMaster.Infrastructure.Services
                 .AnyAsync(x => x.Email == request.Email, cancellationToken);
 
             if (emailExists)
-                throw new Exception("Użytkownik z takim adresem email już istnieje.");
+                throw new UserAlreadyExistsException(request.UserName);
 
             var user = new User
             {
@@ -61,14 +62,14 @@ namespace QuizMaster.Infrastructure.Services
                 .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
 
             if (user == null)
-                throw new Exception("Nieprawidłowy email lub hasło.");
+                throw new InvalidLoginException();
 
             var passwordValid = _passwordHasher.VerifyPassword(
                 request.Password,
                 user.PasswordHash);
 
             if (!passwordValid)
-                throw new Exception("Nieprawidłowy email lub hasło.");
+                throw new InvalidLoginException();
 
             var token = _jwtTokenService.GenerateToken(user);
 

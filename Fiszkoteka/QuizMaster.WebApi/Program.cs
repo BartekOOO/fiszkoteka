@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Infrastructure.Data;
 using QuizMaster.Infrastructure.Services;
+using QuizMaster.WebApi.Middlewares;
 using System.Text;
 
 
@@ -52,7 +53,8 @@ builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
