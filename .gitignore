@@ -16,3 +16,5 @@
 /Fiszkoteka/QuizMaster.Infrastructure/obj
 /Fiszkoteka/QuizMaster.Web/bin/Debug/net10.0
 /Fiszkoteka/QuizMaster.Web/obj
+/Fiszkoteka/QuizMaster.WebApi/bin/Debug/net10.0
+/Fiszkoteka/QuizMaster.WebApi/obj
