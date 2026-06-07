@@ -62,7 +62,22 @@ namespace QuizMaster.Application.Services
 
         public async Task<FlashcardSet> GetFlashcardSetDetails(int id, int userId, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            var result = await _context.FlashcardSets
+                .AsNoTracking()
+                .Include(x => x.Flashcards)
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+            if (result == null)
+                throw new FlashcardSetNotFoundException(id);
+
+            if (result.UserId != userId)
+                throw new FlashcardSetAccessDeniedException();
+
+            result.Category = await _context.Categories
+                .FirstOrDefaultAsync(x => x.Id == result.CategoryId, cancellationToken)
+                ?? throw new Exception("Nie udało się pobrać danych o kategorii");
+
+            return result;
         }
 
         public async Task<List<FlashcardSet>> GetFlashcardSets(int userId, CancellationToken cancellationToken = default)
@@ -89,7 +104,49 @@ namespace QuizMaster.Application.Services
 
         public async Task UpdateFlashcardSet(int id, UpdateFlashcardSetCommand command, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            if (command == null)
+                throw new ArgumentNullException(nameof(command));
+
+            var flashcardSet = await _context.FlashcardSets
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+            if (flashcardSet == null)
+                throw new FlashcardSetNotFoundException(id);
+
+            if (flashcardSet.UserId != command.UserId)
+                throw new FlashcardSetAccessDeniedException();
+
+            if (command.Name != null)
+            {
+                if (string.IsNullOrWhiteSpace(command.Name))
+                    throw new EmptyFieldException("Nazwa");
+
+                flashcardSet.Name = command.Name.Trim();
+            }
+
+            if (command.Description != null)
+            {
+                flashcardSet.Description = command.Description.Trim();
+            }
+
+            if (command.IsPublic.HasValue)
+            {
+                flashcardSet.IsPublic = command.IsPublic.Value;
+            }
+
+            if (command.CategoryId.HasValue)
+            {
+                var categoryExists = await _context.Categories
+                    .AsNoTracking()
+                    .AnyAsync(x => x.Id == command.CategoryId.Value, cancellationToken);
+
+                if (!categoryExists)
+                    throw new CategoryNotFoundException(command.CategoryId.Value);
+
+                flashcardSet.CategoryId = command.CategoryId.Value;
+            }
+
+            await _context.SaveChangesAsync(cancellationToken);
         }
     }
 }
