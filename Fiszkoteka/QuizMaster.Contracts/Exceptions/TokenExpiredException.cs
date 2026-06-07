@@ -13,7 +13,7 @@ namespace QuizMaster.Contracts.Exceptions
         }
 
         private TokenExpiredException(string message)
-            : base(message, 410)
+            : base(message, 401)
         {
 
         }

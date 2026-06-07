@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using QuizMaster.Contracts.Auth;
 using QuizMaster.Contracts.Interfaces;
+using QuizMaster.Core.Models;
 
 namespace QuizMaster.WebApi.Controllers
 {
@@ -16,6 +17,7 @@ namespace QuizMaster.WebApi.Controllers
         }
 
         [HttpPost("register")]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request, CancellationToken cancellationToken)
         {
             var result = await _authService.RegisterAsync(request, cancellationToken);
@@ -23,6 +25,7 @@ namespace QuizMaster.WebApi.Controllers
         }
 
         [HttpPost("login")]
+        [ProducesResponseType(typeof(AuthResponse), StatusCodes.Status200OK)]
         public async Task<ActionResult<AuthResponse>> Login(LoginRequest request, CancellationToken cancellationToken)
         {
             var result = await _authService.LoginAsync(request, cancellationToken);
