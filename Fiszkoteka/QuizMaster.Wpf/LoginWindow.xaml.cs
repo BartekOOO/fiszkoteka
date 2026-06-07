@@ -1,4 +1,7 @@
-﻿using QuizMaster.Contracts.Auth;
+﻿using Microsoft.Extensions.DependencyInjection;
+using QuizMaster.Contracts.Auth;
+using QuizMaster.Wpf.Interfaces;
+using QuizMaster.Wpf.Services;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -20,57 +23,73 @@ namespace QuizMaster.Wpf
     /// </summary>
     public partial class LoginWindow : Window
     {
-        private readonly HttpClient _httpClient;
+        private readonly IAuthApiClient _authApiClient;
+        private readonly IMessageDialogService _messageDialogService;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly IAppSession _appSession;
 
-        public LoginWindow()
+        public LoginWindow(
+            IAuthApiClient authApiClient,
+            IMessageDialogService messageDialogService,
+            IServiceProvider serviceProvider,
+            IAppSession appSession)
         {
             InitializeComponent();
 
-            _httpClient = new HttpClient
-            {
-                BaseAddress = new Uri("https://localhost:7001")
-            };
+            _authApiClient = authApiClient;
+            _messageDialogService = messageDialogService;
+            _serviceProvider = serviceProvider;
+            _appSession = appSession;
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(EmailTextBox.Text))
+                {
+                    _messageDialogService.ShowWarning(
+                        "Brak adresu email",
+                        "Wpisz adres email.",
+                        this);
+
+                    return;
+                }
+
+                if (string.IsNullOrWhiteSpace(PasswordBox.Password))
+                {
+                    _messageDialogService.ShowWarning(
+                        "Brak hasła",
+                        "Wpisz hasło.",
+                        this);
+
+                    return;
+                }
+
                 var request = new LoginRequest
                 {
                     Email = EmailTextBox.Text,
                     Password = PasswordBox.Password
                 };
 
-                var response = await _httpClient.PostAsJsonAsync("/api/auth/login", request);
+                var authResponse = await _authApiClient.LoginAsync(request);
 
-                if (!response.IsSuccessStatusCode)
-                {
-                    MessageBox.Show("Nieprawidłowy email lub hasło.");
-                    return;
-                }
+                _appSession.UserId = authResponse.UserId;
+                _appSession.UserName = authResponse.UserName;
+                _appSession.Email = authResponse.Email;
+                _appSession.Token = authResponse.Token;
 
-                var authResponse = await response.Content.ReadFromJsonAsync<AuthResponse>();
-
-                if (authResponse == null)
-                {
-                    MessageBox.Show("Nie udało się odczytać odpowiedzi z serwera.");
-                    return;
-                }
-
-                AppSession.UserId = authResponse.UserId;
-                AppSession.UserName = authResponse.UserName;
-                AppSession.Email = authResponse.Email;
-                AppSession.Token = authResponse.Token;
-
-                var mainWindow = new MainWindow();
+                var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
                 mainWindow.Show();
 
                 Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Błąd logowania: " + ex.Message);
+                _messageDialogService.ShowError(
+                    "Błąd logowania",
+                    ex.Message,
+                    this);
             }
         }
     }

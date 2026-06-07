@@ -1,50 +1,187 @@
 ﻿<Window x:Class="QuizMaster.Wpf.LoginWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Logowanie"
-        Height="360"
-        Width="420"
+        Title="QuizMaster - Logowanie"
+        Height="520"
+        Width="900"
         WindowStartupLocation="CenterScreen"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        Background="#F3F6FA">
 
-    <Grid Margin="30">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="8"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="18"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="8"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="25"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Window.Resources>
 
-        <TextBlock Grid.Row="0"
-                   Text="QuizMaster"
-                   FontSize="28"
-                   FontWeight="Bold"
-                   HorizontalAlignment="Center"/>
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
 
-        <TextBlock Grid.Row="2"
-                   Text="Email"/>
+        <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
 
-        <TextBox Grid.Row="4"
-                 x:Name="EmailTextBox"
-                 Height="35"/>
+        <Style x:Key="InputPasswordBoxStyle" TargetType="PasswordBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="10,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Background" Value="White"/>
+        </Style>
 
-        <TextBlock Grid.Row="6"
-                   Text="Hasło"/>
+    </Window.Resources>
 
-        <PasswordBox Grid.Row="8"
-                     x:Name="PasswordBox"
-                     Height="35"/>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="420"/>
+        </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="10"
-                Content="Zaloguj"
-                Height="38"
-                Click="LoginButton_Click"/>
+        <!-- Lewy panel -->
+        <Border Grid.Column="0"
+                Background="#1E293B"
+                Padding="50">
+
+            <Grid>
+                <StackPanel VerticalAlignment="Center">
+
+                    <TextBlock Text="QuizMaster"
+                               Foreground="White"
+                               FontSize="42"
+                               FontWeight="Bold"/>
+
+                    <TextBlock Text="Ucz się szybciej dzięki fiszkom, quizom i powtórkom."
+                               Foreground="#CBD5E1"
+                               FontSize="18"
+                               TextWrapping="Wrap"
+                               Margin="0,18,0,0"
+                               LineHeight="28"/>
+
+                    <StackPanel Margin="0,40,0,0">
+
+                        <TextBlock Text="✓ Twórz własne zestawy fiszek"
+                                   Foreground="#E2E8F0"
+                                   FontSize="16"
+                                   Margin="0,0,0,12"/>
+
+                        <TextBlock Text="✓ Śledź postęp nauki"
+                                   Foreground="#E2E8F0"
+                                   FontSize="16"
+                                   Margin="0,0,0,12"/>
+
+                        <TextBlock Text="✓ Powtarzaj materiał wtedy, kiedy trzeba"
+                                   Foreground="#E2E8F0"
+                                   FontSize="16"/>
+
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Prawy panel logowania -->
+        <Grid Grid.Column="1"
+              Background="#F8FAFC">
+
+            <Border Width="330"
+                    Background="White"
+                    CornerRadius="16"
+                    Padding="30"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="25"
+                                      ShadowDepth="0"
+                                      Opacity="0.15"/>
+                </Border.Effect>
+
+                <StackPanel>
+
+                    <TextBlock Text="Witaj ponownie"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               Foreground="#0F172A"
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="Zaloguj się do swojego konta"
+                               FontSize="14"
+                               Foreground="#64748B"
+                               HorizontalAlignment="Center"
+                               Margin="0,8,0,30"/>
+
+                    <TextBlock Text="Email"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="#334155"
+                               Margin="0,0,0,6"/>
+
+                    <TextBox x:Name="EmailTextBox"
+                             Style="{StaticResource InputTextBoxStyle}"
+                             Margin="0,0,0,18"/>
+
+                    <TextBlock Text="Hasło"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="#334155"
+                               Margin="0,0,0,6"/>
+
+                    <PasswordBox x:Name="PasswordBox"
+                                 Style="{StaticResource InputPasswordBoxStyle}"
+                                 Margin="0,0,0,8"/>
+
+                    <DockPanel Margin="0,0,0,24">
+                        <CheckBox Content="Zapamiętaj mnie"
+                                  Foreground="#64748B"
+                                  VerticalAlignment="Center"/>
+
+                        <TextBlock Text="Nie pamiętasz hasła?"
+                                   Foreground="#2563EB"
+                                   Cursor="Hand"
+                                   HorizontalAlignment="Right"
+                                   DockPanel.Dock="Right"/>
+                    </DockPanel>
+
+                    <Button Content="Zaloguj"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Click="LoginButton_Click"/>
+
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Center"
+                                Margin="0,24,0,0">
+
+                        <TextBlock Text="Nie masz konta?"
+                                   Foreground="#64748B"/>
+
+                        <TextBlock Text=" Zarejestruj się"
+                                   Foreground="#2563EB"
+                                   FontWeight="SemiBold"
+                                   Cursor="Hand"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

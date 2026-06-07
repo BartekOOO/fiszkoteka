@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\QuizMaster.Contracts\QuizMaster.Contracts.csproj" />
     <ProjectReference Include="..\QuizMaster.Core\QuizMaster.Core.csproj" />
   </ItemGroup>
