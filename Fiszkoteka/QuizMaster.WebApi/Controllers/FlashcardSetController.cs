@@ -46,6 +46,14 @@ namespace QuizMaster.WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("public")]
+        [ProducesResponseType(typeof(List<FlashcardSet>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetPublicFlashcardSets(CancellationToken cancellationToken)
+        {
+            var result = await _flashcardSetService.GetPublicFlashcardSets(cancellationToken);
+            return Ok(result);
+        }
+
         [HttpGet("{id:int}")]
         [ProducesResponseType(typeof(FlashcardSet), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetFlashcardSetDetails(

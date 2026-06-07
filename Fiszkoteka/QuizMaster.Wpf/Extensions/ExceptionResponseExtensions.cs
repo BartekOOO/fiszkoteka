@@ -24,6 +24,21 @@ namespace QuizMaster.Wpf.Extensions
                 case nameof(TokenExpiredException):
                     return TokenExpiredException.FromMessage(error.Message);
 
+                case nameof(FlashcardNotFoundException):
+                    return FlashcardNotFoundException.FromMessage(error.Message);
+
+                case nameof(FlashcardSetNotFoundException):
+                    return FlashcardSetNotFoundException.FromMessage(error.Message);
+
+                case nameof(FlashcardSetAccessDeniedException):
+                    return FlashcardSetAccessDeniedException.FromMessage(error.Message);
+
+                case nameof(CategoryNotFoundException):
+                    return CategoryNotFoundException.FromMessage(error.Message);
+
+                case nameof(EmptyFieldException):
+                    return EmptyFieldException.FromMessage(error.Message);
+
                 default:
                     return new Exception(error.Message ?? "Wystąpił nieznany błąd.");
             }
