@@ -1,9 +1,5 @@
-﻿using QuizMaster.Contracts.Commands.Flashcard;
-using QuizMaster.Contracts.Commands.FlashcardSet;
+﻿using QuizMaster.Contracts.Commands.Flashcards;
 using QuizMaster.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace QuizMaster.Contracts.Interfaces
 {

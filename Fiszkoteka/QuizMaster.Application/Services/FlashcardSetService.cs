@@ -1,10 +1,7 @@
 ﻿using QuizMaster.Application.Interfaces;
-using QuizMaster.Contracts.Commands.FlashcardSet;
+using QuizMaster.Contracts.Commands.FlashcardSets;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace QuizMaster.Application.Services
 {
@@ -19,7 +16,7 @@ namespace QuizMaster.Application.Services
             _authService = authService;
         }
 
-        public async Task<FlashcardSet> CreateFlashcardSet(CreateFlashCardSetCommand command, CancellationToken cancellationToken = default)
+        public async Task<FlashcardSet> CreateFlashcardSet(CreateFlashcardSetCommand command, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }

@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QuizMaster.Contracts.Commands.FlashcardSet;
+using QuizMaster.Contracts.Commands.FlashcardSets;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.WebApi.Extensions;
-using System.Security.Claims;
 
 namespace QuizMaster.WebApi.Controllers
 {
@@ -21,7 +20,7 @@ namespace QuizMaster.WebApi.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateFlashcardSet(
-           [FromBody] CreateFlashCardSetCommand command,
+           [FromBody] CreateFlashcardSetCommand command,
            CancellationToken cancellationToken)
         {
             command.UserId = this.GetCurrentUserId();

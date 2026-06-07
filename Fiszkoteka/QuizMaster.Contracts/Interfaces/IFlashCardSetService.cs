@@ -1,9 +1,5 @@
-﻿using QuizMaster.Contracts.Commands.FlashcardSet;
+﻿using QuizMaster.Contracts.Commands.FlashcardSets;
 using QuizMaster.Core.Models;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Text;
 
 namespace QuizMaster.Contracts.Interfaces
 {
@@ -11,7 +7,7 @@ namespace QuizMaster.Contracts.Interfaces
     {
         Task<FlashcardSet> GetFlashcardSetDetails(int id, int userId, CancellationToken cancellationToken = default);
         Task<List<FlashcardSet>> GetFlashcardSets(int userId, CancellationToken cancellationToken = default);
-        Task<FlashcardSet> CreateFlashcardSet(CreateFlashCardSetCommand command, CancellationToken cancellationToken = default);
+        Task<FlashcardSet> CreateFlashcardSet(CreateFlashcardSetCommand command, CancellationToken cancellationToken = default);
         Task UpdateFlashcardSet(int id, UpdateFlashcardSetCommand command, CancellationToken cancellationToken);
         Task DeleteFlashcardSet(int  id, int userId , CancellationToken cancellationToken = default);
     }

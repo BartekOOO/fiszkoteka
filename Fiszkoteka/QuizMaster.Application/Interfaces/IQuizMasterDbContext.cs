@@ -14,6 +14,7 @@ namespace QuizMaster.Application.Interfaces
         DbSet<Flashcard> Flashcards { get; }
         DbSet<UserFlashcardProgress> UserFlashcardProgresses { get; }
         DbSet<RevokedToken> RevokedTokens { get; }
+        DbSet<Category> Categories { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
