@@ -3,5 +3,6 @@
   <Project Path="QuizMaster.Contracts/QuizMaster.Contracts.csproj" Id="72759bb9-cdee-4ca1-909b-22a8876ee821" />
   <Project Path="QuizMaster.Core/QuizMaster.Core.csproj" Id="b19318e4-0963-4b85-a46b-6ac2766f6ebd" />
   <Project Path="QuizMaster.Infrastructure/QuizMaster.Infrastructure.csproj" Id="5125a973-6bd7-44d0-b478-c2682fa7e47b" />
+  <Project Path="QuizMaster.WebApi/QuizMaster.WebApi.csproj" Id="6dce62ef-429c-49d4-93d1-f93b09b1adb8" />
   <Project Path="QuizMaster.Wpf/QuizMaster.Wpf.csproj" Id="3152cdda-c264-4100-afeb-6ca5b9e48bda" />
 </Solution>
