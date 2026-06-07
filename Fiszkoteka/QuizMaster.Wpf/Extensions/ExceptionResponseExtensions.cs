@@ -39,6 +39,9 @@ namespace QuizMaster.Wpf.Extensions
                 case nameof(EmptyFieldException):
                     return EmptyFieldException.FromMessage(error.Message);
 
+                case nameof(FlashcardAccessDeniedException):
+                    return FlashcardAccessDeniedException.FromMessage(error.Message);
+
                 default:
                     return new Exception(error.Message ?? "Wystąpił nieznany błąd.");
             }
