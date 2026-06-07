@@ -122,5 +122,10 @@ namespace QuizMaster.Infrastructure.Services
 
             await _context.SaveChangesAsync(cancellationToken);
         }
+
+        public async Task<User> GetUser(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

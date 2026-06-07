@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QuizMaster.Contracts.Commands;
+using QuizMaster.Contracts.Commands.FlashcardSet;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.WebApi.Extensions;
 using System.Security.Claims;
@@ -67,6 +67,19 @@ namespace QuizMaster.WebApi.Controllers
             await _flashcardSetService.UpdateFlashcardSet(
                 id,
                 command,
+                cancellationToken);
+
+            return Ok();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteFlashcardSet(
+            int id,
+            CancellationToken cancellationToken)
+        {
+            await _flashcardSetService.DeleteFlashcardSet(
+                id,
+                this.GetCurrentUserId(),
                 cancellationToken);
 
             return Ok();

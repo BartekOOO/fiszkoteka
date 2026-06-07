@@ -1,4 +1,4 @@
-﻿using QuizMaster.Contracts.Commands;
+﻿using QuizMaster.Contracts.Commands.FlashcardSet;
 using QuizMaster.Core.Models;
 using System;
 using System.Collections.Generic;

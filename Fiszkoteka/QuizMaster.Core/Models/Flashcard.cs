@@ -9,16 +9,12 @@ namespace QuizMaster.Core.Models
     public sealed class Flashcard : QuizMasterObject
     {
         public int Id { get; set; }
-
         public int FlashcardSetId { get; set; }
         public FlashcardSet FlashcardSet { get; set; }
-
         public string Question { get; set; }
         public string Answer { get; set; }
         public string Hint { get; set; }
-
-        public DifficultyLevel DifficultyLevel { get; set; }
-
+        public DifficultyLevel Difficulty { get; set; }
         public List<UserFlashcardProgress> Progresses { get; set; }
 
         public Flashcard()

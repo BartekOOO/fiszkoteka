@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizMaster.Contracts.Commands
+namespace QuizMaster.Contracts.Commands.FlashcardSets
 {
     public sealed class UpdateFlashcardSetCommand : CommandBase
     {
@@ -17,10 +17,13 @@ namespace QuizMaster.Contracts.Commands
         public UpdateFlashcardSetCommand() { }
         public UpdateFlashcardSetCommand(FlashcardSet flashcardSet)
         {
+            if(flashcardSet == null)
+                throw new ArgumentNullException(nameof(flashcardSet));
+
             this.Name = flashcardSet.Name;
             this.Description = flashcardSet.Description;
             this.IsPublic = flashcardSet.IsPublic;
-            this.CategoryId = flashcardSet.Category?.Id;
+            this.CategoryId = flashcardSet.CategoryId;
         }
     }
 }

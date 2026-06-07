@@ -6,7 +6,7 @@ using System.Text;
 
 namespace QuizMaster.Core.Models
 {
-    public sealed class FlashcardSet : QuizMasterObject, IEnumerable<Flashcard>
+    public sealed class FlashcardSet : QuizMasterObject
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -17,19 +17,10 @@ namespace QuizMaster.Core.Models
         public DateTime CreatedAt { get; set; }
         public ICollection<Flashcard> Flashcards { get; set; }
         public Category Category { get; set; }
+        public int CategoryId { get; set; }
         public FlashcardSet()
         {
             this.Flashcards = new List<Flashcard>();
-        }
-
-        public IEnumerator<Flashcard> GetEnumerator()
-        {
-            return this.Flashcards.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
         }
     }
 }

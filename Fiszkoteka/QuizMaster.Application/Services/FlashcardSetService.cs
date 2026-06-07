@@ -1,5 +1,5 @@
 ﻿using QuizMaster.Application.Interfaces;
-using QuizMaster.Contracts.Commands;
+using QuizMaster.Contracts.Commands.FlashcardSet;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Core.Models;
 using System;
@@ -11,10 +11,12 @@ namespace QuizMaster.Application.Services
     public sealed class FlashcardSetService : IFlashcardSetService
     {
         private readonly IQuizMasterDbContext _context;
+        private readonly IAuthService _authService;
 
-        public FlashcardSetService(IQuizMasterDbContext context)
+        public FlashcardSetService(IQuizMasterDbContext context, IAuthService authService)
         {
             _context = context;
+            _authService = authService;
         }
 
         public async Task<FlashcardSet> CreateFlashcardSet(CreateFlashCardSetCommand command, CancellationToken cancellationToken = default)
