@@ -6,8 +6,8 @@ namespace QuizMaster.Core.Enums
 {
     public enum DifficultyLevel
     {
-        Easy,
-        Medium,
-        Hard
+        Easy = 1,
+        Medium = 2,
+        Hard = 3
     }
 }

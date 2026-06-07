@@ -15,4 +15,8 @@
     <ProjectReference Include="..\QuizMaster.Infrastructure\QuizMaster.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="WIndows\" />
+  </ItemGroup>
+
 </Project>

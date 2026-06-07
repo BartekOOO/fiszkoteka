@@ -5,8 +5,281 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QuizMaster.Wpf"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        Title="QuizMaster"
+        Height="600"
+        Width="1000"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        WindowState="Maximized"
+        Background="#F4F6F8">
 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Górny pasek -->
+        <Border Grid.Row="0"
+                Background="#2D3748"
+                Padding="20,0">
+            <DockPanel LastChildFill="False">
+
+                <TextBlock Text="QuizMaster"
+                           Foreground="White"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           DockPanel.Dock="Left"/>
+
+                <StackPanel Orientation="Horizontal"
+                            DockPanel.Dock="Right"
+                            VerticalAlignment="Center">
+
+                    <Button Content="Nowy zestaw"
+                            Width="120"
+                            Height="36"
+                            Margin="0,0,10,0"/>
+
+                    <Button Content="Import CSV"
+                            Width="100"
+                            Height="36"
+                            Margin="0,0,10,0"/>
+
+                    <Button Content="Ustawienia"
+                            Width="100"
+                            Height="36"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Główna zawartość -->
+        <Grid Grid.Row="1" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="280"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Lewy panel: menu -->
+            <Border Grid.Column="0"
+                    Background="White"
+                    CornerRadius="10"
+                    Padding="15"
+                    Margin="0,0,15,0">
+                <StackPanel>
+
+                    <TextBlock Text="Menu"
+                               FontSize="20"
+                               FontWeight="Bold"
+                               Margin="0,0,0,15"/>
+
+                    <Button Content="Moje zestawy"
+                            Height="40"
+                            Margin="0,0,0,8"/>
+
+                    <Button Content="Powtórki na dziś"
+                            Height="40"
+                            Margin="0,0,0,8"/>
+
+                    <Button Content="Tryb quizu"
+                            Height="40"
+                            Margin="0,0,0,8"/>
+
+                    <Button Content="Statystyki"
+                            Height="40"
+                            Margin="0,0,0,8"/>
+
+                    <Button Content="Publiczne zestawy"
+                            Height="40"
+                            Margin="0,0,0,8"/>
+
+                    <Separator Margin="0,15,0,15"/>
+
+                    <TextBlock Text="Szybki start"
+                               FontSize="16"
+                               FontWeight="SemiBold"
+                               Margin="0,0,0,10"/>
+
+                    <Button Content="Rozpocznij naukę"
+                            Height="42"
+                            FontWeight="Bold"/>
+                </StackPanel>
+            </Border>
+
+            <!-- Środek: zestawy użytkownika -->
+            <Border Grid.Column="1"
+                    Background="White"
+                    CornerRadius="10"
+                    Padding="20"
+                    Margin="0,0,15,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Twoje zestawy fiszek"
+                               FontSize="24"
+                               FontWeight="Bold"/>
+
+                    <TextBlock Grid.Row="1"
+                               Text="Wybierz zestaw, aby rozpocząć naukę albo dodać nowe fiszki."
+                               Foreground="Gray"
+                               Margin="0,5,0,15"/>
+
+                    <ListBox Grid.Row="2"
+                             BorderThickness="0">
+                        <ListBoxItem Margin="0,0,0,10">
+                            <Border Background="#EDF2F7"
+                                    CornerRadius="8"
+                                    Padding="15">
+                                <StackPanel>
+                                    <TextBlock Text="SQL Server - podstawy"
+                                               FontSize="18"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="24 fiszki • postęp 40%"
+                                               Foreground="Gray"
+                                               Margin="0,4,0,10"/>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Ucz się"
+                                                Width="90"
+                                                Margin="0,0,8,0"/>
+                                        <Button Content="Edytuj"
+                                                Width="90"
+                                                Margin="0,0,8,0"/>
+                                        <Button Content="Fiszki"
+                                                Width="90"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </ListBoxItem>
+
+                        <ListBoxItem Margin="0,0,0,10">
+                            <Border Background="#EDF2F7"
+                                    CornerRadius="8"
+                                    Padding="15">
+                                <StackPanel>
+                                    <TextBlock Text="Angielski - słówka"
+                                               FontSize="18"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="50 fiszek • postęp 68%"
+                                               Foreground="Gray"
+                                               Margin="0,4,0,10"/>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Ucz się"
+                                                Width="90"
+                                                Margin="0,0,8,0"/>
+                                        <Button Content="Edytuj"
+                                                Width="90"
+                                                Margin="0,0,8,0"/>
+                                        <Button Content="Fiszki"
+                                                Width="90"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </ListBoxItem>
+
+                        <ListBoxItem Margin="0,0,0,10">
+                            <Border Background="#EDF2F7"
+                                    CornerRadius="8"
+                                    Padding="15">
+                                <StackPanel>
+                                    <TextBlock Text="Azure i Kubernetes"
+                                               FontSize="18"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="31 fiszek • postęp 15%"
+                                               Foreground="Gray"
+                                               Margin="0,4,0,10"/>
+
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Content="Ucz się"
+                                                Width="90"
+                                                Margin="0,0,8,0"/>
+                                        <Button Content="Edytuj"
+                                                Width="90"
+                                                Margin="0,0,8,0"/>
+                                        <Button Content="Fiszki"
+                                                Width="90"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </ListBoxItem>
+                    </ListBox>
+                </Grid>
+            </Border>
+
+            <!-- Prawy panel: powtórki i statystyki -->
+            <StackPanel Grid.Column="2">
+
+                <Border Background="White"
+                        CornerRadius="10"
+                        Padding="18"
+                        Margin="0,0,0,15">
+                    <StackPanel>
+                        <TextBlock Text="Powtórki na dziś"
+                                   FontSize="20"
+                                   FontWeight="Bold"/>
+
+                        <TextBlock Text="12"
+                                   FontSize="42"
+                                   FontWeight="Bold"
+                                   Margin="0,10,0,0"/>
+
+                        <TextBlock Text="fiszek czeka na powtórkę"
+                                   Foreground="Gray"
+                                   Margin="0,0,0,15"/>
+
+                        <Button Content="Powtarzaj teraz"
+                                Height="40"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White"
+                        CornerRadius="10"
+                        Padding="18"
+                        Margin="0,0,0,15">
+                    <StackPanel>
+                        <TextBlock Text="Dzisiejszy wynik"
+                                   FontSize="20"
+                                   FontWeight="Bold"/>
+
+                        <TextBlock Text="82%"
+                                   FontSize="38"
+                                   FontWeight="Bold"
+                                   Margin="0,10,0,0"/>
+
+                        <TextBlock Text="poprawnych odpowiedzi"
+                                   Foreground="Gray"/>
+                    </StackPanel>
+                </Border>
+
+                <Border Background="White"
+                        CornerRadius="10"
+                        Padding="18">
+                    <StackPanel>
+                        <TextBlock Text="Szybkie akcje"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,12"/>
+
+                        <Button Content="Dodaj fiszkę"
+                                Height="38"
+                                Margin="0,0,0,8"/>
+
+                        <Button Content="Stwórz zestaw"
+                                Height="38"
+                                Margin="0,0,0,8"/>
+
+                        <Button Content="Eksportuj zestaw"
+                                Height="38"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>
