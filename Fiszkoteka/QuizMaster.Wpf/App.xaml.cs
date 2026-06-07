@@ -41,6 +41,7 @@ namespace QuizMaster.Wpf
             services.AddTransient<MainWindow>();
             services.AddTransient<RegisterWindow>();
             services.AddSingleton<IAppSession, AppSession>();
+            services.AddSingleton<IAppSettings, AppSettings>();
         }
     }
 

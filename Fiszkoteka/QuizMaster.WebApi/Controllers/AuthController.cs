@@ -28,5 +28,14 @@ namespace QuizMaster.WebApi.Controllers
             var result = await _authService.LoginAsync(request, cancellationToken);
             return Ok(result);
         }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout(
+            [FromBody] LogoutRequest request,
+            CancellationToken cancellationToken)
+        {
+            await _authService.LogoutAsync(request, cancellationToken);
+            return Ok();
+        }
     }
 }

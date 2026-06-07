@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using QuizMaster.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using QuizMaster.Infrastructure.Data;
 namespace QuizMaster.Infrastructure.Migrations
 {
     [DbContext(typeof(QuizMasterDbContext))]
-    partial class QuizMasterDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260607135318_RevokedTokens")]
+    partial class RevokedTokens
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

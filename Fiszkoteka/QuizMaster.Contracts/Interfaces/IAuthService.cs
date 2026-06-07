@@ -9,5 +9,6 @@ namespace QuizMaster.Contracts.Interfaces
     {
         Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default);
         Task<AuthResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default);
+        Task LogoutAsync(LogoutRequest request, CancellationToken cancellationToken = default);
     }
 }

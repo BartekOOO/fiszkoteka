@@ -155,7 +155,8 @@
                     <DockPanel Margin="0,0,0,24">
                         <CheckBox Content="Zapamiętaj mnie"
                                   Foreground="#64748B"
-                                  VerticalAlignment="Center"/>
+                                  VerticalAlignment="Center"
+                                  x:Name="RememberMeCheckbox"/>
 
                         <TextBlock Text="Nie pamiętasz hasła?"
                                    Foreground="#2563EB"

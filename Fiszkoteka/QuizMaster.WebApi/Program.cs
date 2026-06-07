@@ -6,6 +6,7 @@ using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Infrastructure.Data;
 using QuizMaster.Infrastructure.Services;
 using QuizMaster.WebApi.Middlewares;
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 
 
@@ -42,7 +43,37 @@ builder.Services
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtKey))
+                Encoding.UTF8.GetBytes(jwtKey)),
+
+            ClockSkew = TimeSpan.Zero
+        };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnTokenValidated = async context =>
+            {
+                var db = context.HttpContext.RequestServices
+                    .GetRequiredService<QuizMasterDbContext>();
+
+                var jti = context.Principal?
+                    .Claims
+                    .FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Jti)
+                    ?.Value;
+
+                if (string.IsNullOrWhiteSpace(jti))
+                {
+                    context.Fail("Token nie zawiera JTI.");
+                    return;
+                }
+
+                var revoked = await db.RevokedTokens
+                    .AnyAsync(x => x.Jti == jti);
+
+                if (revoked)
+                {
+                    context.Fail("Token został unieważniony.");
+                }
+            }
         };
     });
 
@@ -52,8 +83,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
 
-builder.Services.AddSingleton<IFlashcardService, FlashcardService>();
-builder.Services.AddSingleton<IFlashcardSetService, FlashcardSetService>();
+builder.Services.AddScoped<IFlashcardService, FlashcardService>();
+builder.Services.AddScoped<IFlashcardSetService, FlashcardSetService>();
 
 var app = builder.Build();
 

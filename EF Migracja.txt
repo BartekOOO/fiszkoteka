@@ -1,3 +1,7 @@
 dotnet ef migrations add InitialCreate --project QuizMaster.Infrastructure --startup-project QuizMaster.WebApi
 
 dotnet ef database update --project QuizMaster.Infrastructure --startup-project QuizMaster.WebApi
+
+
+dotnet ef migrations add AddRevokedTokens
+dotnet ef database update

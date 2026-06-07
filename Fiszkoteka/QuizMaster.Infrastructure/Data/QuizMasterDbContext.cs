@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizMaster.Contracts.Models;
 using QuizMaster.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace QuizMaster.Infrastructure.Data
         public DbSet<FlashcardSet> FlashcardSets { get; set; }
         public DbSet<Flashcard> Flashcards { get; set; }
         public DbSet<UserFlashcardProgress> UserFlashcardProgresses { get; set; }
+        public DbSet<RevokedToken> RevokedTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -90,6 +92,29 @@ namespace QuizMaster.Infrastructure.Data
                 entity.HasOne(x => x.Flashcard)
                     .WithMany(x => x.Progresses)
                     .HasForeignKey(x => x.FlashcardId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<RevokedToken>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.Jti)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.Property(x => x.RevokedAt)
+                    .IsRequired();
+
+                entity.Property(x => x.ExpiresAt)
+                    .IsRequired();
+
+                entity.HasIndex(x => x.Jti)
+                    .IsUnique();
+
+                entity.HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey(x => x.UserId)
                     .OnDelete(DeleteBehavior.Cascade);
             });
         }

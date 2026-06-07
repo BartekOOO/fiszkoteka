@@ -27,12 +27,14 @@ namespace QuizMaster.Wpf
         private readonly IMessageDialogService _messageDialogService;
         private readonly IServiceProvider _serviceProvider;
         private readonly IAppSession _appSession;
+        private readonly IAppSettings _appSettings;
 
         public LoginWindow(
             IAuthApiClient authApiClient,
             IMessageDialogService messageDialogService,
             IServiceProvider serviceProvider,
-            IAppSession appSession)
+            IAppSession appSession,
+            IAppSettings appSettings)
         {
             InitializeComponent();
 
@@ -40,6 +42,14 @@ namespace QuizMaster.Wpf
             _messageDialogService = messageDialogService;
             _serviceProvider = serviceProvider;
             _appSession = appSession;
+            _appSettings = appSettings;
+
+            _appSettings.Load();
+
+            if (_appSettings.RememberLogin)
+                EmailTextBox.Text = _appSettings.SavedEmail;
+
+            RememberMeCheckbox.IsChecked = _appSettings.RememberLogin;
         }
 
         private async void LoginButton_Click(object sender, RoutedEventArgs e)
@@ -80,6 +90,8 @@ namespace QuizMaster.Wpf
                 _appSession.UserName = authResponse.UserName;
                 _appSession.Email = authResponse.Email;
                 _appSession.Token = authResponse.Token;
+
+                _appSettings.SaveRememberLogin(EmailTextBox.Text, RememberMeCheckbox.IsChecked ?? false);
 
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
                 mainWindow.Show();
