@@ -10,7 +10,9 @@ namespace QuizMaster.Core.Models
         public int Id { get; set; }
 
         public int UserId { get; set; }
+        public User User { get; set; }
         public int FlashcardId { get; set; }
+        public Flashcard Flashcard { get; set; }
 
         public int CorrectAnswersCount { get; set; }
         public int WrongAnswersCount { get; set; }

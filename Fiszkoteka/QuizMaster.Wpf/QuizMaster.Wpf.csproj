@@ -9,14 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\QuizMaster.Application\QuizMaster.Application.csproj" />
     <ProjectReference Include="..\QuizMaster.Contracts\QuizMaster.Contracts.csproj" />
     <ProjectReference Include="..\QuizMaster.Core\QuizMaster.Core.csproj" />
-    <ProjectReference Include="..\QuizMaster.Infrastructure\QuizMaster.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="WIndows\" />
   </ItemGroup>
 
 </Project>
