@@ -1,4 +1,5 @@
 ﻿using QuizMaster.Contracts.Auth;
+using QuizMaster.Wpf.Delegates;
 using System;
 using System.Collections.Generic;
 using System.Text;

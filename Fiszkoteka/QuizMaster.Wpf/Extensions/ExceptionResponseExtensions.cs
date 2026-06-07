@@ -21,6 +21,9 @@ namespace QuizMaster.Wpf.Extensions
                 case nameof(UserAlreadyExistsException):
                     return UserAlreadyExistsException.FromMessage(error.Message);
 
+                case nameof(TokenExpiredException):
+                    return TokenExpiredException.FromMessage(error.Message);
+
                 default:
                     return new Exception(error.Message ?? "Wystąpił nieznany błąd.");
             }

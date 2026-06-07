@@ -1,4 +1,5 @@
 ﻿using QuizMaster.Contracts.Auth;
+using QuizMaster.Wpf.Delegates;
 using QuizMaster.Wpf.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,14 +24,14 @@ namespace QuizMaster.Wpf.Services
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Nieprawidłowy email lub hasło.");
+                throw new Exception("Nieprawidłowy email lub hasło");
             }
 
             var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
 
             if (result == null)
             {
-                throw new Exception("Serwer zwrócił pustą odpowiedź.");
+                throw new Exception("Serwer zwrócił pustą odpowiedź");
             }
 
             return result;
@@ -42,14 +43,14 @@ namespace QuizMaster.Wpf.Services
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new Exception("Nie udało się zarejestrować użytkownika.");
+                throw new Exception("Nie udało się zarejestrować użytkownika");
             }
 
             var result = await response.Content.ReadFromJsonAsync<AuthResponse>();
 
             if (result == null)
             {
-                throw new Exception("Serwer zwrócił pustą odpowiedź.");
+                throw new Exception("Serwer zwrócił pustą odpowiedź");
             }
 
             return result;
