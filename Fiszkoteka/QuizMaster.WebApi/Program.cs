@@ -25,6 +25,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddScoped<IQuizMasterDbContext>(provider =>
+    provider.GetRequiredService<QuizMasterDbContext>());
 
 builder.Services.AddDbContext<QuizMasterDbContext>(options =>
 {

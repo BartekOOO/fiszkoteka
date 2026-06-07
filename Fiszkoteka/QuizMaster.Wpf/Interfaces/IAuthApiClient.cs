@@ -10,5 +10,6 @@ namespace QuizMaster.Wpf.Interfaces
     {
         Task<AuthResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default);
         Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default);
+        Task Logout(LogoutRequest request, CancellationToken cancellationToken = default);
     }
 }

@@ -13,5 +13,13 @@ namespace QuizMaster.Wpf.Services
         public string Token { get; set; }
 
         public bool IsLoggedIn => !string.IsNullOrWhiteSpace(Token);
+
+        public void Clear()
+        {
+            UserId = 0;
+            UserName = null;
+            Email = null;
+            Token = null;
+        }
     }
 }

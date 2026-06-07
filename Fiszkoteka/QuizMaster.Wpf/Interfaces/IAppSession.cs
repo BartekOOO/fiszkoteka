@@ -12,5 +12,6 @@ namespace QuizMaster.Wpf.Interfaces
         public string Token { get; set; }
 
         public bool IsLoggedIn { get; }
+        void Clear();
     }
 }

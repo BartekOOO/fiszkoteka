@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Contracts.Models;
 using QuizMaster.Core.Models;
 using System;
@@ -7,7 +8,7 @@ using System.Text;
 
 namespace QuizMaster.Infrastructure.Data
 {
-    public class QuizMasterDbContext : DbContext
+    public class QuizMasterDbContext : DbContext, IQuizMasterDbContext
     {
         public QuizMasterDbContext(DbContextOptions<QuizMasterDbContext> options)
             : base(options)

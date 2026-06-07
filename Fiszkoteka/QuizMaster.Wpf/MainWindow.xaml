@@ -1,285 +1,463 @@
 ﻿<Window x:Class="QuizMaster.Wpf.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:QuizMaster.Wpf"
-        mc:Ignorable="d"
         Title="QuizMaster"
-        Height="600"
-        Width="1000"
+        Height="650"
+        Width="1100"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        WindowState="Maximized"
-        Background="#F4F6F8">
+        Background="#F3F6FA">
+
+    <Window.Resources>
+
+        <Style x:Key="SidebarButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter VerticalAlignment="Center"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="SecondaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Background" Value="#E0E7FF"/>
+            <Setter Property="Foreground" Value="#2563EB"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Padding" Value="18,0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="22"/>
+            <Setter Property="Margin" Value="0,0,18,18"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="22"
+                                      ShadowDepth="0"
+                                      Opacity="0.10"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
 
-        <!-- Górny pasek -->
-        <Border Grid.Row="0"
-                Background="#2D3748"
-                Padding="20,0">
-            <DockPanel LastChildFill="False">
+        <!-- Sidebar -->
+        <Border Grid.Column="0"
+                Background="#1E293B"
+                Padding="24">
 
-                <TextBlock Text="QuizMaster"
-                           Foreground="White"
-                           FontSize="26"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           DockPanel.Dock="Left"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                <StackPanel Orientation="Horizontal"
-                            DockPanel.Dock="Right"
-                            VerticalAlignment="Center">
-
-                    <Button Content="Nowy zestaw"
-                            Width="120"
-                            Height="36"
-                            Margin="0,0,10,0"/>
-
-                    <Button Content="Import CSV"
-                            Width="100"
-                            Height="36"
-                            Margin="0,0,10,0"/>
-
-                    <Button Content="Ustawienia"
-                            Width="100"
-                            Height="36"/>
-                </StackPanel>
-            </DockPanel>
-        </Border>
-
-        <!-- Główna zawartość -->
-        <Grid Grid.Row="1" Margin="20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="260"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="280"/>
-            </Grid.ColumnDefinitions>
-
-            <!-- Lewy panel: menu -->
-            <Border Grid.Column="0"
-                    Background="White"
-                    CornerRadius="10"
-                    Padding="15"
-                    Margin="0,0,15,0">
-                <StackPanel>
-
-                    <TextBlock Text="Menu"
-                               FontSize="20"
-                               FontWeight="Bold"
-                               Margin="0,0,0,15"/>
-
-                    <Button Content="Moje zestawy"
-                            Height="40"
-                            Margin="0,0,0,8"/>
-
-                    <Button Content="Powtórki na dziś"
-                            Height="40"
-                            Margin="0,0,0,8"/>
-
-                    <Button Content="Tryb quizu"
-                            Height="40"
-                            Margin="0,0,0,8"/>
-
-                    <Button Content="Statystyki"
-                            Height="40"
-                            Margin="0,0,0,8"/>
-
-                    <Button Content="Publiczne zestawy"
-                            Height="40"
-                            Margin="0,0,0,8"/>
-
-                    <Separator Margin="0,15,0,15"/>
-
-                    <TextBlock Text="Szybki start"
-                               FontSize="16"
-                               FontWeight="SemiBold"
-                               Margin="0,0,0,10"/>
-
-                    <Button Content="Rozpocznij naukę"
-                            Height="42"
-                            FontWeight="Bold"/>
-                </StackPanel>
-            </Border>
-
-            <!-- Środek: zestawy użytkownika -->
-            <Border Grid.Column="1"
-                    Background="White"
-                    CornerRadius="10"
-                    Padding="20"
-                    Margin="0,0,15,0">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-
-                    <TextBlock Text="Twoje zestawy fiszek"
-                               FontSize="24"
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="QuizMaster"
+                               Foreground="White"
+                               FontSize="28"
                                FontWeight="Bold"/>
 
-                    <TextBlock Grid.Row="1"
-                               Text="Wybierz zestaw, aby rozpocząć naukę albo dodać nowe fiszki."
-                               Foreground="Gray"
-                               Margin="0,5,0,15"/>
+                    <TextBlock Text="Panel nauki"
+                               Foreground="#94A3B8"
+                               FontSize="14"
+                               Margin="0,6,0,34"/>
+                </StackPanel>
 
-                    <ListBox Grid.Row="2"
-                             BorderThickness="0">
-                        <ListBoxItem Margin="0,0,0,10">
-                            <Border Background="#EDF2F7"
-                                    CornerRadius="8"
-                                    Padding="15">
-                                <StackPanel>
-                                    <TextBlock Text="SQL Server - podstawy"
-                                               FontSize="18"
-                                               FontWeight="Bold"/>
-                                    <TextBlock Text="24 fiszki • postęp 40%"
-                                               Foreground="Gray"
-                                               Margin="0,4,0,10"/>
+                <StackPanel Grid.Row="1">
+                    <Button Content="🏠  Pulpit"
+                            Style="{StaticResource SidebarButtonStyle}"
+                            Background="#334155"
+                            Foreground="White"/>
 
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button Content="Ucz się"
-                                                Width="90"
-                                                Margin="0,0,8,0"/>
-                                        <Button Content="Edytuj"
-                                                Width="90"
-                                                Margin="0,0,8,0"/>
-                                        <Button Content="Fiszki"
-                                                Width="90"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
-                        </ListBoxItem>
+                    <Button Content="📚  Moje zestawy"
+                            Style="{StaticResource SidebarButtonStyle}"/>
 
-                        <ListBoxItem Margin="0,0,0,10">
-                            <Border Background="#EDF2F7"
-                                    CornerRadius="8"
-                                    Padding="15">
-                                <StackPanel>
-                                    <TextBlock Text="Angielski - słówka"
-                                               FontSize="18"
-                                               FontWeight="Bold"/>
-                                    <TextBlock Text="50 fiszek • postęp 68%"
-                                               Foreground="Gray"
-                                               Margin="0,4,0,10"/>
 
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button Content="Ucz się"
-                                                Width="90"
-                                                Margin="0,0,8,0"/>
-                                        <Button Content="Edytuj"
-                                                Width="90"
-                                                Margin="0,0,8,0"/>
-                                        <Button Content="Fiszki"
-                                                Width="90"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
-                        </ListBoxItem>
+                    <Button Content="📈  Postępy"
+                            Style="{StaticResource SidebarButtonStyle}"/>
 
-                        <ListBoxItem Margin="0,0,0,10">
-                            <Border Background="#EDF2F7"
-                                    CornerRadius="8"
-                                    Padding="15">
-                                <StackPanel>
-                                    <TextBlock Text="Azure i Kubernetes"
-                                               FontSize="18"
-                                               FontWeight="Bold"/>
-                                    <TextBlock Text="31 fiszek • postęp 15%"
-                                               Foreground="Gray"
-                                               Margin="0,4,0,10"/>
+                    <Button Content="⚙  Ustawienia"
+                            Style="{StaticResource SidebarButtonStyle}"/>
+                </StackPanel>
 
-                                    <StackPanel Orientation="Horizontal">
-                                        <Button Content="Ucz się"
-                                                Width="90"
-                                                Margin="0,0,8,0"/>
-                                        <Button Content="Edytuj"
-                                                Width="90"
-                                                Margin="0,0,8,0"/>
-                                        <Button Content="Fiszki"
-                                                Width="90"/>
-                                    </StackPanel>
-                                </StackPanel>
-                            </Border>
-                        </ListBoxItem>
-                    </ListBox>
-                </Grid>
-            </Border>
+                <StackPanel Grid.Row="2">
+                    <Border Background="#0F172A"
+                            CornerRadius="12"
+                            Padding="14"
+                            Margin="0,0,0,14">
 
-            <!-- Prawy panel: powtórki i statystyki -->
-            <StackPanel Grid.Column="2">
+                        <StackPanel>
+                            <TextBlock Text="Zalogowano jako"
+                                       Foreground="#94A3B8"
+                                       FontSize="12"/>
 
-                <Border Background="White"
-                        CornerRadius="10"
-                        Padding="18"
-                        Margin="0,0,0,15">
+                            <TextBlock x:Name="UserNameTextBlock"
+                                       Text="Użytkownik"
+                                       Foreground="White"
+                                       FontSize="15"
+                                       FontWeight="SemiBold"
+                                       Margin="0,4,0,0"/>
+
+                            <TextBlock x:Name="UserEmailTextBlock"
+                                       Text="email@example.com"
+                                       Foreground="#CBD5E1"
+                                       FontSize="12"
+                                       Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Button Content="Wyloguj"
+                            Background="#EF4444"
+                            Foreground="White"
+                            Height="40"
+                            BorderThickness="0"
+                            Cursor="Hand"
+                            FontWeight="SemiBold"
+                            Click="LogoutButton_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main content -->
+        <Grid Grid.Column="1"
+              Background="#F8FAFC" Margin="20">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <DockPanel Grid.Row="0"
+                       Margin="0,0,0,28">
+
+                <StackPanel DockPanel.Dock="Left">
+                    <TextBlock Text="Witaj ponownie"
+                               FontSize="30"
+                               FontWeight="Bold"
+                               Foreground="#0F172A"/>
+
+                    <TextBlock Text="Kontynuuj naukę albo utwórz nowy zestaw fiszek."
+                               FontSize="15"
+                               Foreground="#64748B"
+                               Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <StackPanel Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            DockPanel.Dock="Right">
+
+                    <Button Content="+ Nowy zestaw"
+                            Style="{StaticResource PrimaryButtonStyle}"
+                            Width="135"
+                            Margin="0,0,10,0"/>
+
+                    <Button Content="Rozpocznij naukę"
+                            Style="{StaticResource SecondaryButtonStyle}"
+                            Width="150"/>
+                </StackPanel>
+            </DockPanel>
+
+            <!-- Statystyki -->
+            <Grid Grid.Row="1"
+                  Margin="0,0,0,8">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0"
+                        Style="{StaticResource CardStyle}">
                     <StackPanel>
-                        <TextBlock Text="Powtórki na dziś"
-                                   FontSize="20"
-                                   FontWeight="Bold"/>
-
+                        <TextBlock Text="📚"
+                                   FontSize="26"/>
                         <TextBlock Text="12"
-                                   FontSize="42"
+                                   FontSize="30"
                                    FontWeight="Bold"
-                                   Margin="0,10,0,0"/>
-
-                        <TextBlock Text="fiszek czeka na powtórkę"
-                                   Foreground="Gray"
-                                   Margin="0,0,0,15"/>
-
-                        <Button Content="Powtarzaj teraz"
-                                Height="40"/>
+                                   Foreground="#0F172A"
+                                   Margin="0,12,0,0"/>
+                        <TextBlock Text="Zestawów fiszek"
+                                   Foreground="#64748B"
+                                   FontSize="14"/>
                     </StackPanel>
                 </Border>
 
-                <Border Background="White"
-                        CornerRadius="10"
-                        Padding="18"
-                        Margin="0,0,0,15">
+                <Border Grid.Column="1"
+                        Style="{StaticResource CardStyle}">
                     <StackPanel>
-                        <TextBlock Text="Dzisiejszy wynik"
-                                   FontSize="20"
-                                   FontWeight="Bold"/>
-
-                        <TextBlock Text="82%"
-                                   FontSize="38"
+                        <TextBlock Text="🧠"
+                                   FontSize="26"/>
+                        <TextBlock Text="248"
+                                   FontSize="30"
                                    FontWeight="Bold"
-                                   Margin="0,10,0,0"/>
-
-                        <TextBlock Text="poprawnych odpowiedzi"
-                                   Foreground="Gray"/>
+                                   Foreground="#0F172A"
+                                   Margin="0,12,0,0"/>
+                        <TextBlock Text="Fiszek łącznie"
+                                   Foreground="#64748B"
+                                   FontSize="14"/>
                     </StackPanel>
                 </Border>
 
-                <Border Background="White"
-                        CornerRadius="10"
-                        Padding="18">
+                <Border Grid.Column="2"
+                        Style="{StaticResource CardStyle}">
                     <StackPanel>
-                        <TextBlock Text="Szybkie akcje"
-                                   FontSize="20"
+                        <TextBlock Text="🔥"
+                                   FontSize="26"/>
+                        <TextBlock Text="7 dni"
+                                   FontSize="30"
                                    FontWeight="Bold"
-                                   Margin="0,0,0,12"/>
-
-                        <Button Content="Dodaj fiszkę"
-                                Height="38"
-                                Margin="0,0,0,8"/>
-
-                        <Button Content="Stwórz zestaw"
-                                Height="38"
-                                Margin="0,0,0,8"/>
-
-                        <Button Content="Eksportuj zestaw"
-                                Height="38"/>
+                                   Foreground="#0F172A"
+                                   Margin="0,12,0,0"/>
+                        <TextBlock Text="Seria nauki"
+                                   Foreground="#64748B"
+                                   FontSize="14"/>
                     </StackPanel>
                 </Border>
 
-            </StackPanel>
+                <Border Grid.Column="3"
+                        Style="{StaticResource CardStyle}"
+                        Margin="0,0,0,18">
+                    <StackPanel>
+                        <TextBlock Text="✅"
+                                   FontSize="26"/>
+                        <TextBlock Text="84%"
+                                   FontSize="30"
+                                   FontWeight="Bold"
+                                   Foreground="#0F172A"
+                                   Margin="0,12,0,0"/>
+                        <TextBlock Text="Skuteczność"
+                                   Foreground="#64748B"
+                                   FontSize="14"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Dolna część -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="310"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Ostatnie zestawy -->
+                <Border Grid.Column="0"
+                        Style="{StaticResource CardStyle}"
+                        Margin="0,0,18,0">
+
+                    <StackPanel>
+                        <DockPanel Margin="0,0,0,18">
+                            <TextBlock Text="Ostatnie zestawy"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#0F172A"
+                                       DockPanel.Dock="Left"/>
+
+                            <TextBlock Text="Zobacz wszystkie"
+                                       Foreground="#2563EB"
+                                       FontWeight="SemiBold"
+                                       Cursor="Hand"
+                                       HorizontalAlignment="Right"
+                                       DockPanel.Dock="Right"/>
+                        </DockPanel>
+
+                        <Border Background="#F8FAFC"
+                                CornerRadius="12"
+                                Padding="16"
+                                Margin="0,0,0,12">
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Left">
+                                    <TextBlock Text="Angielski - słówka B2"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="#0F172A"/>
+                                    <TextBlock Text="42 fiszki • ostatnia nauka dzisiaj"
+                                               FontSize="13"
+                                               Foreground="#64748B"
+                                               Margin="0,4,0,0"/>
+                                </StackPanel>
+
+                                <Button Content="Ucz się"
+                                        Width="90"
+                                        Height="34"
+                                        HorizontalAlignment="Right"
+                                        Style="{StaticResource SecondaryButtonStyle}"
+                                        DockPanel.Dock="Right"/>
+                            </DockPanel>
+                        </Border>
+
+                        <Border Background="#F8FAFC"
+                                CornerRadius="12"
+                                Padding="16"
+                                Margin="0,0,0,12">
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Left">
+                                    <TextBlock Text="Programowanie C#"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="#0F172A"/>
+                                    <TextBlock Text="68 fiszek • ostatnia nauka wczoraj"
+                                               FontSize="13"
+                                               Foreground="#64748B"
+                                               Margin="0,4,0,0"/>
+                                </StackPanel>
+
+                                <Button Content="Ucz się"
+                                        Width="90"
+                                        Height="34"
+                                        HorizontalAlignment="Right"
+                                        Style="{StaticResource SecondaryButtonStyle}"
+                                        DockPanel.Dock="Right"/>
+                            </DockPanel>
+                        </Border>
+
+                        <Border Background="#F8FAFC"
+                                CornerRadius="12"
+                                Padding="16">
+                            <DockPanel>
+                                <StackPanel DockPanel.Dock="Left">
+                                    <TextBlock Text="Bazy danych SQL"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="#0F172A"/>
+                                    <TextBlock Text="31 fiszek • ostatnia nauka 3 dni temu"
+                                               FontSize="13"
+                                               Foreground="#64748B"
+                                               Margin="0,4,0,0"/>
+                                </StackPanel>
+
+                                <Button Content="Ucz się"
+                                        Width="90"
+                                        Height="34"
+                                        HorizontalAlignment="Right"
+                                        Style="{StaticResource SecondaryButtonStyle}"
+                                        DockPanel.Dock="Right"/>
+                            </DockPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- Panel boczny -->
+                <StackPanel Grid.Column="1">
+
+                    <Border Style="{StaticResource CardStyle}"
+                            Margin="0,0,0,18">
+                        <StackPanel>
+                            <TextBlock Text="Dzisiejszy cel"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#0F172A"/>
+
+                            <TextBlock Text="Powtórz przynajmniej 30 fiszek, żeby utrzymać serię."
+                                       TextWrapping="Wrap"
+                                       FontSize="14"
+                                       Foreground="#64748B"
+                                       Margin="0,10,0,18"/>
+
+                            <ProgressBar Height="10"
+                                         Minimum="0"
+                                         Maximum="30"
+                                         Value="18"
+                                         Foreground="#2563EB"
+                                         Background="#E2E8F0"/>
+
+                            <TextBlock Text="18 / 30 fiszek"
+                                       Foreground="#64748B"
+                                       FontSize="13"
+                                       HorizontalAlignment="Right"
+                                       Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Style="{StaticResource CardStyle}"
+                            Margin="0">
+                        <StackPanel>
+                            <TextBlock Text="Szybkie akcje"
+                                       FontSize="20"
+                                       FontWeight="Bold"
+                                       Foreground="#0F172A"
+                                       Margin="0,0,0,16"/>
+
+                            <Button Content="Dodaj fiszkę"
+                                    Style="{StaticResource PrimaryButtonStyle}"
+                                    Margin="0,0,0,10"/>
+
+                            <Button Content="Importuj zestaw"
+                                    Style="{StaticResource SecondaryButtonStyle}"
+                                    Margin="0,0,0,10"/>
+
+                            <Button Content="Losowy quiz"
+                                    Style="{StaticResource SecondaryButtonStyle}"/>
+                        </StackPanel>
+                    </Border>
+
+                </StackPanel>
+            </Grid>
         </Grid>
     </Grid>
 </Window>

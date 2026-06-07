@@ -37,6 +37,16 @@ namespace QuizMaster.Wpf.Services
             return result;
         }
 
+        public async Task Logout(LogoutRequest request, CancellationToken cancellationToken = default)
+        {
+            var response = await _httpClient.PostAsJsonAsync("/api/auth/logout", request, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception("Nie udało się wylogować");
+            }
+        }
+
         public async Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken cancellationToken = default)
         {
             var response = await _httpClient.PostAsJsonAsync("/api/auth/register", request, cancellationToken);
