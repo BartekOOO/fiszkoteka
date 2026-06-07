@@ -1,4 +1,5 @@
-﻿using QuizMaster.Contracts.Commands;
+﻿using QuizMaster.Application.Interfaces;
+using QuizMaster.Contracts.Commands;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Core.Models;
 using System;
@@ -21,17 +22,22 @@ namespace QuizMaster.Application.Services
             throw new NotImplementedException();
         }
 
-        public async Task<FlashcardSet> GetFlashcardSetDetails(int id, User user, CancellationToken cancellationToken = default)
+        public async Task DeleteFlashcardSet(int id, int userId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<FlashcardSet>> GetFlashcardSets(User user, CancellationToken cancellationToken = default)
+        public async Task<FlashcardSet> GetFlashcardSetDetails(int id, int userId, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
 
-        public async Task UpdateFlashcardSet(int flashcardSetId, UpdateFlashcardSetCommand command, CancellationToken cancellationToken)
+        public async Task<List<FlashcardSet>> GetFlashcardSets(int userId, CancellationToken cancellationToken = default)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task UpdateFlashcardSet(int id, UpdateFlashcardSetCommand command, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }

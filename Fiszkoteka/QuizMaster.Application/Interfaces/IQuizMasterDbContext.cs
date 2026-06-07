@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace QuizMaster.Contracts.Interfaces
+namespace QuizMaster.Application.Interfaces
 {
     public interface IQuizMasterDbContext
     {

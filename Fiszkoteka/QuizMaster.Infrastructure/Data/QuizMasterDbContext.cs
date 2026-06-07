@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using QuizMaster.Application.Interfaces;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Contracts.Models;
 using QuizMaster.Core.Models;

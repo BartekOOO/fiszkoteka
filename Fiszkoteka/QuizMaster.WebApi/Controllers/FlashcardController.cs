@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using QuizMaster.Contracts.Interfaces;
 
 namespace QuizMaster.WebApi.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("api/flashcard")]
     public sealed class FlashcardController : ControllerBase
     {

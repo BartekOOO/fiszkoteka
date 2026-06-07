@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using QuizMaster.Application.Interfaces;
 using QuizMaster.Application.Services;
 using QuizMaster.Contracts.Exceptions;
 using QuizMaster.Contracts.Interfaces;
@@ -24,7 +25,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddScoped<ITransactionManager, EfTransactionManager>();
 builder.Services.AddScoped<IQuizMasterDbContext>(provider =>
     provider.GetRequiredService<QuizMasterDbContext>());
 

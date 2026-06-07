@@ -8,6 +8,6 @@ namespace QuizMaster.Contracts.Abstracts
 {
     public abstract class CommandBase : QuizMasterObject
     {
-        public User User { get; set; }
+        public int UserId { get; set; }
     }
 }
