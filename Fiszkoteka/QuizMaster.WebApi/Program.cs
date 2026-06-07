@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using QuizMaster.Application.Services;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Infrastructure.Data;
 using QuizMaster.Infrastructure.Services;
@@ -50,6 +51,9 @@ builder.Services.AddAuthorization();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IPasswordHasher, PasswordHasher>();
 builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+builder.Services.AddSingleton<IFlashcardService, FlashcardService>();
+builder.Services.AddSingleton<IFlashcardSetService, FlashcardSetService>();
 
 var app = builder.Build();
 

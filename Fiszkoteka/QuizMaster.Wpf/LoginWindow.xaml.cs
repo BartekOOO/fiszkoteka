@@ -92,5 +92,10 @@ namespace QuizMaster.Wpf
                     this);
             }
         }
+
+        private void RegisterAccount_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

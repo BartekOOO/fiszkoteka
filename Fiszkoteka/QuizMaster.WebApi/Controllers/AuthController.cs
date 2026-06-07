@@ -16,16 +16,16 @@ namespace QuizMaster.WebApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request)
+        public async Task<ActionResult<AuthResponse>> Register(RegisterRequest request, CancellationToken cancellationToken)
         {
-            var result = await _authService.RegisterAsync(request);
+            var result = await _authService.RegisterAsync(request, cancellationToken);
             return Ok(result);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<AuthResponse>> Login(LoginRequest request)
+        public async Task<ActionResult<AuthResponse>> Login(LoginRequest request, CancellationToken cancellationToken)
         {
-            var result = await _authService.LoginAsync(request);
+            var result = await _authService.LoginAsync(request, cancellationToken);
             return Ok(result);
         }
     }

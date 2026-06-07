@@ -174,10 +174,11 @@
                         <TextBlock Text="Nie masz konta?"
                                    Foreground="#64748B"/>
 
-                        <TextBlock Text=" Zarejestruj się"
+                        <Button Content=" Zarejestruj się"
                                    Foreground="#2563EB"
                                    FontWeight="SemiBold"
-                                   Cursor="Hand"/>
+                                   Cursor="Hand" Click="RegisterAccount_Click"
+                                   />
                     </StackPanel>
 
                 </StackPanel>

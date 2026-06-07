@@ -4,8 +4,7 @@ using System.Text;
 
 namespace QuizMaster.Contracts.Interfaces
 {
-    public interface IFlashcardSetService
+    public interface IFlashcardService
     {
-
     }
 }
