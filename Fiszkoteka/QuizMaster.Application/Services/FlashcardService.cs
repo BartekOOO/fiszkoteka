@@ -81,13 +81,13 @@ namespace QuizMaster.Application.Services
         }
 
         public async Task<List<Flashcard>> GetFlashcards(
+            int flashCardSetId,
             int userId,
             CancellationToken cancellationToken = default)
         {
             var flashcards = await _context.Flashcards
                 .AsNoTracking()
-                .Include(x => x.FlashcardSet)
-                .Where(x => x.FlashcardSet.UserId == userId)
+                .Where(x => x.FlashcardSet.UserId == userId && x.FlashcardSetId == flashCardSetId)
                 .OrderBy(x => x.FlashcardSet.Name)
                 .ThenBy(x => x.Id)
                 .ToListAsync(cancellationToken);

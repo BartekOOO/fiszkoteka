@@ -64,7 +64,6 @@ namespace QuizMaster.Application.Services
         {
             var result = await _context.FlashcardSets
                 .AsNoTracking()
-                .Include(x => x.Flashcards)
                 .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
 
             if (result == null)
@@ -74,8 +73,14 @@ namespace QuizMaster.Application.Services
                 throw new FlashcardSetAccessDeniedException();
 
             result.Category = await _context.Categories
+                .AsNoTracking()
                 .FirstOrDefaultAsync(x => x.Id == result.CategoryId, cancellationToken)
                 ?? throw new Exception("Nie udało się pobrać danych o kategorii");
+
+            result.Flashcards = await _context.Flashcards
+                .AsNoTracking()
+                .Where(x => x.FlashcardSetId == id)
+                .ToListAsync(cancellationToken);
 
             return result;
         }
