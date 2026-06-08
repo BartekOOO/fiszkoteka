@@ -11,5 +11,6 @@ namespace QuizMaster.Core.Dto
         public int WrongAnswersCount { get; set; }
 
         public bool SessionFinished { get; set; }
+        public int ReviewedFlashcardsCount { get; set; }
     }
 }
