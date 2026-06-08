@@ -47,7 +47,7 @@ namespace QuizMaster.Application.Services
                 FlashcardSetId = command.FlashcardSetId,
                 Question = command.Question.Trim(),
                 Answer = command.Answer.Trim(),
-                Hint = string.IsNullOrWhiteSpace(command.Hint) ? null : command.Hint.Trim(),
+                Hint = command.Hint.Trim(),
                 Difficulty = command.Difficulty
             };
 
@@ -74,6 +74,16 @@ namespace QuizMaster.Application.Services
 
             if (flashcard.FlashcardSet.UserId != userId)
                 throw new FlashcardAccessDeniedException();
+
+            var usedInActiveSession = await _context.LearningSessionItems
+                .AsNoTracking()
+                .AnyAsync(x =>
+                    x.FlashcardId == id &&
+                    x.LearningSession.FinishedAt == null,
+                    cancellationToken);
+
+            if (usedInActiveSession)
+                throw new ActiveLearningSessionExistsException();
 
             _context.Flashcards.Remove(flashcard);
 

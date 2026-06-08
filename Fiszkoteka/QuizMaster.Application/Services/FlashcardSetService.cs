@@ -55,6 +55,16 @@ namespace QuizMaster.Application.Services
             if (flashcardSet.UserId != userId)
                 throw new FlashcardSetAccessDeniedException();
 
+            var hasActiveSession = await _context.LearningSessions
+                .AsNoTracking()
+                .AnyAsync(x =>
+                    x.FlashcardSetId == id &&
+                    x.FinishedAt == null,
+                    cancellationToken);
+
+            if (hasActiveSession)
+                throw new ActiveLearningSessionExistsException();
+
             _context.FlashcardSets.Remove(flashcardSet);
 
             await _context.SaveChangesAsync(cancellationToken);

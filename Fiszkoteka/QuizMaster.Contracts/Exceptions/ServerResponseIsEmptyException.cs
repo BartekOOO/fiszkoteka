@@ -11,5 +11,16 @@ namespace QuizMaster.Contracts.Exceptions
         {
 
         }
+
+        private ServerResponseIsEmptyException(string message)
+            : base(message, 500)
+        {
+
+        }
+
+        public static ServerResponseIsEmptyException FromMessage(string message)
+        {
+            return new ServerResponseIsEmptyException(message);
+        }
     }
 }
