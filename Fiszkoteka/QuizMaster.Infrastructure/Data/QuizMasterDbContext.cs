@@ -183,7 +183,7 @@ namespace QuizMaster.Infrastructure.Data
                 entity.HasOne(x => x.Flashcard)
                     .WithMany()
                     .HasForeignKey(x => x.FlashcardId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasIndex(x => new { x.LearningSessionId, x.FlashcardId })
                     .IsUnique();
