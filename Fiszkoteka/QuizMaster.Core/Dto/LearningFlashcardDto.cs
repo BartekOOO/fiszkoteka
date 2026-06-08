@@ -12,6 +12,7 @@ namespace QuizMaster.Core.Dto
 
         public string Question { get; set; }
         public string Hint { get; set; }
+        public string Answer { get; set; }
 
         public DifficultyLevel Difficulty { get; set; }
     }

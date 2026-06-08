@@ -48,6 +48,19 @@ namespace QuizMaster.WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet]
+        [ProducesResponseType(typeof(List<LearningSessionDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetLearningSessions(
+            int id,
+            CancellationToken cancellationToken)
+        {
+            var result = await _learningSessionService.GetLearningSessions(
+                this.GetCurrentUserId(),
+                cancellationToken);
+
+            return Ok(result);
+        }
+
         [HttpGet("{id:int}/next-flashcard")]
         [ProducesResponseType(typeof(LearningFlashcardDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetNextFlashcard(

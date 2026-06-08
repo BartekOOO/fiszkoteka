@@ -58,6 +58,19 @@ namespace QuizMaster.Application.Services
                 session,
                 cancellationToken);
 
+            foreach(var item in flashcardSet.Flashcards)
+            {
+                await _context.LearningSessionItems
+                    .AddAsync(new LearningSessionItem()
+                    {
+                        LearningSessionId = result.Entity.Id,
+                        FlashcardId = item.Id,
+                        IsAnswered = false,
+                        IsCorrect = null,
+                        AnsweredAt = null
+                    });
+            }
+
             await _context.SaveChangesAsync(cancellationToken);
 
             return ToDto(session, flashcardSet.Name);
@@ -83,9 +96,9 @@ namespace QuizMaster.Application.Services
         }
 
         public async Task<LearningFlashcardDto> GetNextFlashcard(
-    int sessionId,
-    int userId,
-    CancellationToken cancellationToken = default)
+            int sessionId,
+            int userId,
+            CancellationToken cancellationToken = default)
         {
             var session = await _context.LearningSessions
                 .AsNoTracking()
@@ -100,32 +113,31 @@ namespace QuizMaster.Application.Services
             if (session.IsFinished)
                 throw new LearningSessionFinishedException();
 
-            var alreadyReviewedFlashcardIds = await _context.UserFlashcardProgresses
+            var nextItem = await _context.LearningSessionItems
                 .AsNoTracking()
+                .Include(x => x.Flashcard)
                 .Where(x =>
-                    x.UserId == userId &&
-                    x.Flashcard.FlashcardSetId == session.FlashcardSetId)
-                .Select(x => x.FlashcardId)
-                .ToListAsync(cancellationToken);
-
-            var nextFlashcard = await _context.Flashcards
-                .AsNoTracking()
-                .Where(x =>
-                    x.FlashcardSetId == session.FlashcardSetId &&
-                    !alreadyReviewedFlashcardIds.Contains(x.Id))
+                    x.LearningSessionId == session.Id &&
+                    !x.IsAnswered)
                 .OrderBy(x => x.Id)
                 .FirstOrDefaultAsync(cancellationToken);
 
-            if (nextFlashcard == null)
-                return null;
+            if (nextItem == null)
+                throw new LearningSessionExhaustedException();
+
+            var flashcard = nextItem.Flashcard;
+
+            if (flashcard == null)
+                throw new FlashcardNotFoundException(nextItem.FlashcardId);
 
             return new LearningFlashcardDto
             {
-                Id = nextFlashcard.Id,
-                FlashcardSetId = nextFlashcard.FlashcardSetId,
-                Question = nextFlashcard.Question,
-                Hint = nextFlashcard.Hint,
-                Difficulty = nextFlashcard.Difficulty
+                Id = flashcard.Id,
+                FlashcardSetId = flashcard.FlashcardSetId,
+                Question = flashcard.Question,
+                Hint = flashcard.Hint,
+                Difficulty = flashcard.Difficulty,
+                Answer = flashcard.Answer,
             };
         }
 
@@ -149,75 +161,9 @@ namespace QuizMaster.Application.Services
             if (session.IsFinished)
                 throw new LearningSessionFinishedException();
 
-            var flashcard = await _context.Flashcards
-                .AsNoTracking()
-                .FirstOrDefaultAsync(x =>
-                    x.Id == command.FlashcardId &&
-                    x.FlashcardSetId == session.FlashcardSetId,
-                    cancellationToken);
 
-            if (flashcard == null)
-                throw new FlashcardNotFoundException(command.FlashcardId);
 
-            var progress = await _context.UserFlashcardProgresses
-                .FirstOrDefaultAsync(x =>
-                    x.UserId == command.UserId &&
-                    x.FlashcardId == command.FlashcardId,
-                    cancellationToken);
-
-            if (progress == null)
-            {
-                progress = new UserFlashcardProgress
-                {
-                    UserId = command.UserId,
-                    FlashcardId = command.FlashcardId,
-                    CorrectAnswersCount = 0,
-                    WrongAnswersCount = 0,
-                    MasteryLevel = 0
-                };
-
-                await _context.UserFlashcardProgresses.AddAsync(progress, cancellationToken);
-            }
-
-            if (command.IsCorrect)
-            {
-                progress.CorrectAnswersCount++;
-                progress.MasteryLevel++;
-                session.CorrectAnswersCount++;
-            }
-            else
-            {
-                progress.WrongAnswersCount++;
-                progress.MasteryLevel--;
-
-                if (progress.MasteryLevel < 0)
-                    progress.MasteryLevel = 0;
-
-                session.WrongAnswersCount++;
-            }
-
-            progress.LastReviewedAt = DateTime.UtcNow;
-            progress.NextReviewAt = CalculateNextReviewAt(progress.MasteryLevel);
-
-            session.ReviewedFlashcardsCount++;
-
-            if (session.ReviewedFlashcardsCount >= session.TotalFlashcardsCount)
-            {
-                session.FinishedAt = DateTime.UtcNow;
-            }
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            return new AnswerFlashcardResultDto
-            {
-                FlashcardId = flashcard.Id,
-                IsCorrect = command.IsCorrect,
-                CorrectAnswer = flashcard.Answer,
-                ReviewedFlashcardsCount = session.ReviewedFlashcardsCount,
-                CorrectAnswersCount = session.CorrectAnswersCount,
-                WrongAnswersCount = session.WrongAnswersCount,
-                SessionFinished = session.IsFinished
-            };
+            throw new NotImplementedException("W trakcie pracy");
         }
 
         public async Task<LearningSessionDto> FinishLearningSession(
@@ -283,6 +229,15 @@ namespace QuizMaster.Application.Services
                 WrongAnswersCount = session.WrongAnswersCount,
                 IsFinished = session.IsFinished
             };
+        }
+
+        public async Task<List<LearningSessionDto>> GetLearningSessions(int userId, CancellationToken cancellationToken)
+        {
+            return await _context.LearningSessions
+                .AsNoTracking()
+                .Where(x => x.UserId == userId)
+                .Select(x => ToDto(x, x.FlashcardSet.Name))
+                .ToListAsync(cancellationToken);
         }
     }
 }

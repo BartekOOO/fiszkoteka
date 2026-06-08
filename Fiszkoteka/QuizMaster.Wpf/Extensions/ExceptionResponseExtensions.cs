@@ -24,14 +24,8 @@ namespace QuizMaster.Wpf.Extensions
                 case nameof(TokenExpiredException):
                     return TokenExpiredException.FromMessage(error.Message);
 
-                case nameof(FlashcardNotFoundException):
-                    return FlashcardNotFoundException.FromMessage(error.Message);
-
-                case nameof(FlashcardSetNotFoundException):
-                    return FlashcardSetNotFoundException.FromMessage(error.Message);
-
-                case nameof(FlashcardSetAccessDeniedException):
-                    return FlashcardSetAccessDeniedException.FromMessage(error.Message);
+                case nameof(ServerResponseIsEmptyException):
+                    return ServerResponseIsEmptyException.FromMessage(error.Message);
 
                 case nameof(CategoryNotFoundException):
                     return CategoryNotFoundException.FromMessage(error.Message);
@@ -39,11 +33,29 @@ namespace QuizMaster.Wpf.Extensions
                 case nameof(EmptyFieldException):
                     return EmptyFieldException.FromMessage(error.Message);
 
+                case nameof(EmptyFlashcardSetException):
+                    return EmptyFlashcardSetException.FromMessage(error.Message);
+
+                case nameof(FlashcardNotFoundException):
+                    return FlashcardNotFoundException.FromMessage(error.Message);
+
                 case nameof(FlashcardAccessDeniedException):
                     return FlashcardAccessDeniedException.FromMessage(error.Message);
 
-                case nameof(EmptyFlashcardSetException):
-                    return EmptyFlashcardSetException.FromMessage(error.Message);
+                case nameof(FlashcardSetNotFoundException):
+                    return FlashcardSetNotFoundException.FromMessage(error.Message);
+
+                case nameof(FlashcardSetAccessDeniedException):
+                    return FlashcardSetAccessDeniedException.FromMessage(error.Message);
+
+                case nameof(LearningSessionNotFoundException):
+                    return LearningSessionNotFoundException.FromMessage(error.Message);
+
+                case nameof(LearningSessionFinishedException):
+                    return LearningSessionFinishedException.FromMessage(error.Message);
+
+                case nameof(LearningSessionExhaustedException):
+                    return LearningSessionExhaustedException.FromMessage(error.Message);
 
                 default:
                     return new Exception(error.Message ?? "Wystąpił nieznany błąd.");

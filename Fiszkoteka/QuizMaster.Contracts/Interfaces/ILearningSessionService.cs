@@ -32,5 +32,6 @@ namespace QuizMaster.Contracts.Interfaces
             int sessionId,
             int userId,
             CancellationToken cancellationToken = default);
+        Task<List<LearningSessionDto>> GetLearningSessions(int userId, CancellationToken cancellationToken);
     }
 }
