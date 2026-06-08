@@ -5,7 +5,7 @@ using System.Text;
 
 namespace QuizMaster.Core.Models
 {
-    public class UserFlashcardProgress : QuizMasterObject
+    public sealed class UserFlashcardProgress : QuizMasterObject
     {
         public int Id { get; set; }
 

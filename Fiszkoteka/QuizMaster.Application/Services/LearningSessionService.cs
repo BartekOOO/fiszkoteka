@@ -60,19 +60,7 @@ namespace QuizMaster.Application.Services
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return new LearningSessionDto
-            {
-                Id = result.Entity.Id,
-                FlashcardSetId = flashcardSet.Id,
-                FlashcardSetName = flashcardSet.Name,
-                StartedAt = result.Entity.StartedAt,
-                FinishedAt = result.Entity.FinishedAt,
-                TotalFlashcardsCount = result.Entity.TotalFlashcardsCount,
-                ReviewedFlashcardsCount = result.Entity.ReviewedFlashcardsCount,
-                CorrectAnswersCount = result.Entity.CorrectAnswersCount,
-                WrongAnswersCount = result.Entity.WrongAnswersCount,
-                IsFinished = result.Entity.IsFinished
-            };
+            return ToDto(session, flashcardSet.Name);
         }
 
         public async Task<LearningSessionDto> GetLearningSession(
@@ -95,9 +83,9 @@ namespace QuizMaster.Application.Services
         }
 
         public async Task<LearningFlashcardDto> GetNextFlashcard(
-            int sessionId,
-            int userId,
-            CancellationToken cancellationToken = default)
+    int sessionId,
+    int userId,
+    CancellationToken cancellationToken = default)
         {
             var session = await _context.LearningSessions
                 .AsNoTracking()
@@ -114,7 +102,9 @@ namespace QuizMaster.Application.Services
 
             var alreadyReviewedFlashcardIds = await _context.UserFlashcardProgresses
                 .AsNoTracking()
-                .Where(x => x.UserId == userId)
+                .Where(x =>
+                    x.UserId == userId &&
+                    x.Flashcard.FlashcardSetId == session.FlashcardSetId)
                 .Select(x => x.FlashcardId)
                 .ToListAsync(cancellationToken);
 
@@ -127,9 +117,7 @@ namespace QuizMaster.Application.Services
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (nextFlashcard == null)
-            {
                 return null;
-            }
 
             return new LearningFlashcardDto
             {

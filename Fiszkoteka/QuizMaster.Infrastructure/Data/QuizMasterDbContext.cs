@@ -23,6 +23,7 @@ namespace QuizMaster.Infrastructure.Data
         public DbSet<RevokedToken> RevokedTokens { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<LearningSession> LearningSessions { get; set; }
+        public DbSet<LearningSessionItem> LearningSessionItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -165,6 +166,27 @@ namespace QuizMaster.Infrastructure.Data
                     .WithMany()
                     .HasForeignKey(x => x.FlashcardSetId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<LearningSessionItem>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.IsAnswered)
+                    .IsRequired();
+
+                entity.HasOne(x => x.LearningSession)
+                    .WithMany()
+                    .HasForeignKey(x => x.LearningSessionId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(x => x.Flashcard)
+                    .WithMany()
+                    .HasForeignKey(x => x.FlashcardId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(x => new { x.LearningSessionId, x.FlashcardId })
+                    .IsUnique();
             });
         }
     }

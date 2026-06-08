@@ -16,6 +16,7 @@ namespace QuizMaster.Application.Interfaces
         DbSet<RevokedToken> RevokedTokens { get; }
         DbSet<Category> Categories { get; }
         DbSet<LearningSession> LearningSessions { get; }
+        DbSet<LearningSessionItem> LearningSessionItems { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
