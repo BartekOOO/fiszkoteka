@@ -22,6 +22,7 @@ namespace QuizMaster.Infrastructure.Data
         public DbSet<UserFlashcardProgress> UserFlashcardProgresses { get; set; }
         public DbSet<RevokedToken> RevokedTokens { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<LearningSession> LearningSessions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -134,6 +135,38 @@ namespace QuizMaster.Infrastructure.Data
 
                 entity.HasIndex(x => x.Name)
                     .IsUnique();
+            });
+
+            modelBuilder.Entity<LearningSession>(entity =>
+            {
+                entity.HasKey(x => x.Id);
+
+                entity.Property(x => x.StartedAt)
+                    .IsRequired();
+
+                entity.Property(x => x.FinishedAt);
+
+                entity.Property(x => x.TotalFlashcardsCount)
+                    .IsRequired();
+
+                entity.Property(x => x.ReviewedFlashcardsCount)
+                    .IsRequired();
+
+                entity.Property(x => x.CorrectAnswersCount)
+                    .IsRequired();
+
+                entity.Property(x => x.WrongAnswersCount)
+                    .IsRequired();
+
+                entity.HasOne(x => x.User)
+                    .WithMany()
+                    .HasForeignKey(x => x.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasOne(x => x.FlashcardSet)
+                    .WithMany()
+                    .HasForeignKey(x => x.FlashcardSetId)
+                    .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

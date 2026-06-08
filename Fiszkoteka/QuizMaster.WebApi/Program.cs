@@ -28,7 +28,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<ITransactionManager, EfTransactionManager>();
 builder.Services.AddScoped<IQuizMasterDbContext>(provider =>
     provider.GetRequiredService<QuizMasterDbContext>());
-
+builder.Services.AddScoped<ILearningSessionService, LearningSessionService>();
 builder.Services.AddDbContext<QuizMasterDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
