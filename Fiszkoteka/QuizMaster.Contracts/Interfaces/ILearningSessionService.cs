@@ -28,10 +28,6 @@ namespace QuizMaster.Contracts.Interfaces
             AnswerFlashcardCommand command,
             CancellationToken cancellationToken = default);
 
-        Task<LearningSessionDto> FinishLearningSession(
-            int sessionId,
-            int userId,
-            CancellationToken cancellationToken = default);
         Task<List<LearningSessionDto>> GetLearningSessions(int userId, CancellationToken cancellationToken);
     }
 }
