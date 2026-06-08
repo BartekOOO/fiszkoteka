@@ -144,8 +144,6 @@ namespace QuizMaster.Infrastructure.Data
                 entity.Property(x => x.StartedAt)
                     .IsRequired();
 
-                entity.Property(x => x.FinishedAt);
-
                 entity.Property(x => x.TotalFlashcardsCount)
                     .IsRequired();
 
@@ -161,7 +159,7 @@ namespace QuizMaster.Infrastructure.Data
                 entity.HasOne(x => x.User)
                     .WithMany()
                     .HasForeignKey(x => x.UserId)
-                    .OnDelete(DeleteBehavior.Cascade);
+                    .OnDelete(DeleteBehavior.NoAction);
 
                 entity.HasOne(x => x.FlashcardSet)
                     .WithMany()

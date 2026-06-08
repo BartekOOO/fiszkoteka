@@ -310,7 +310,7 @@ namespace QuizMaster.Infrastructure.Migrations
                     b.HasOne("QuizMaster.Core.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("FlashcardSet");

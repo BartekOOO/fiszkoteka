@@ -39,8 +39,7 @@ namespace QuizMaster.Infrastructure.Migrations
                         name: "FK_LearningSessions_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
