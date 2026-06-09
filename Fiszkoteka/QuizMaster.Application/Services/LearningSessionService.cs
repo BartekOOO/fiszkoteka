@@ -231,9 +231,15 @@ namespace QuizMaster.Application.Services
             progress.LastReviewedAt = DateTime.UtcNow;
             progress.NextReviewAt = CalculateNextReviewAt(progress.MasteryLevel);
 
-            var isSessionFinished = await _context.LearningSessionItems
-                .Where(x => x.LearningSessionId == sessionId)
-                .AllAsync(x => x.IsAnswered, cancellationToken);
+            var hasUnansweredItems = await _context.LearningSessionItems
+                .AsNoTracking()
+                .AnyAsync(x =>
+                    x.LearningSessionId == sessionId &&
+                    x.Id != sessionItem.Id &&
+                    !x.IsAnswered,
+                    cancellationToken);
+
+            var isSessionFinished = !hasUnansweredItems;
 
             if (isSessionFinished)
                 session.FinishedAt = DateTime.UtcNow;
