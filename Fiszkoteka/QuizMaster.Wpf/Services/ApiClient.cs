@@ -120,38 +120,17 @@ namespace QuizMaster.Wpf.Services
             if (response.IsSuccessStatusCode)
                 return;
 
-            var exception = await CreateExceptionAsync(response, cancellationToken);
+            var error = await response.Content.
+                    ReadFromJsonAsync<ExceptionResponse>(cancellationToken);
 
             if (response.StatusCode == HttpStatusCode.Unauthorized ||
-                exception is TokenExpiredException)
+                error.Exception == nameof(TokenExpiredException))
             {
                 _sessionEvents.InvokeSessionExpired();
             }
 
-            throw exception;
-        }
-
-        private static async Task<Exception> CreateExceptionAsync(
-            HttpResponseMessage response,
-            CancellationToken cancellationToken)
-        {
-            try
-            {
-                var error = await response.Content.
-                    ReadFromJsonAsync<ExceptionResponse>(cancellationToken);
-
-                if (error != null)
-                    return error.Map();
-            }
-            catch
-            {
-
-            }
-
-            if (response.StatusCode == HttpStatusCode.Unauthorized)
-                return TokenExpiredException.FromMessage("Sesja wygasła. Zaloguj się ponownie.");
-
-            return new Exception($"Serwer zwrócił błąd HTTP {(int)response.StatusCode}.");
+            if (error != null)
+                error.Map();    
         }
 
         private static async Task<TResponse> ReadAsync<TResponse>(

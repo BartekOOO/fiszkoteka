@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using QuizMaster.Contracts.Auth;
 using QuizMaster.Wpf.Interfaces;
 using QuizMaster.Wpf.Views;
@@ -20,6 +20,7 @@ namespace QuizMaster.Wpf
     /// </summary>
     public partial class MainWindow : Window
     {
+        private bool _isHandlingSessionExpiration;
         private readonly IAppSession _appSession;
         private readonly IAuthApiClient _authApiClient;
         private readonly IServiceProvider _serviceProvider;
@@ -41,18 +42,34 @@ namespace QuizMaster.Wpf
             _messageDialogService = messageDialogService;
             _authApiClient = authApiClient;
 
-            sessionEvents.OnSessionExpired += () =>
-            {
-                _messageDialogService.ShowWarning($"Sesja wygasła"
-                    , "Sesja wygasła - zaloguj się ponownie");
-                _appSession.Clear();
-                var loginWindow = _serviceProvider.GetRequiredService
-                    <LoginWindow>();
-                loginWindow.Show();
-                Close();
-            };
+            sessionEvents.OnSessionExpired += HandleSessionExpired;
 
             NavigateToDashboard(this, new RoutedEventArgs());
+        }
+
+        private void HandleSessionExpired()
+        {
+            if (_isHandlingSessionExpiration)
+            {
+                return;
+            }
+
+            _isHandlingSessionExpiration = true;
+
+            Dispatcher.Invoke(() =>
+            {
+                _messageDialogService.ShowWarning(
+                    "Sesja wygasła",
+                    "Sesja wygasła - zaloguj się ponownie",
+                    this);
+
+                _appSession.Clear();
+
+                var loginWindow = _serviceProvider.GetRequiredService<LoginWindow>();
+                loginWindow.Show();
+
+                Close();
+            });
         }
 
         private void LoadUserInfo()
@@ -68,8 +85,6 @@ namespace QuizMaster.Wpf
 
         private async void LogoutButton_Click(object sender, RoutedEventArgs e)
         {
-            _appSession.Clear();
-
             var logout = new LogoutRequest()
             {
                 Token = _appSession.Token
@@ -79,12 +94,14 @@ namespace QuizMaster.Wpf
             {
                 await _authApiClient.Logout(logout);
 
+                _appSession.Clear();
+
                 var loginWindow = _serviceProvider.GetRequiredService<LoginWindow>();
                 loginWindow.Show();
 
                 Close();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _messageDialogService.ShowError($"Błąd", ex.Message, this);
             }
