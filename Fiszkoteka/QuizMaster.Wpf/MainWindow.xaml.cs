@@ -29,7 +29,8 @@ namespace QuizMaster.Wpf
             IAppSession appSession,
             IServiceProvider serviceProvider,
             IMessageDialogService messageDialogService,
-            IAuthApiClient authApiClient)
+            IAuthApiClient authApiClient,
+            ISessionEvents sessionEvents)
         {
             InitializeComponent();
 
@@ -39,6 +40,17 @@ namespace QuizMaster.Wpf
             LoadUserInfo();
             _messageDialogService = messageDialogService;
             _authApiClient = authApiClient;
+
+            sessionEvents.OnSessionExpired += () =>
+            {
+                _messageDialogService.ShowWarning($"Sesja wygasła"
+                    , "Sesja wygasła - zaloguj się ponownie");
+                _appSession.Clear();
+                var loginWindow = _serviceProvider.GetRequiredService
+                    <LoginWindow>();
+                loginWindow.Show();
+                Close();
+            };
 
             NavigateToDashboard(this, new RoutedEventArgs());
         }

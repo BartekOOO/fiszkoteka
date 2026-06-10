@@ -1,4 +1,5 @@
 ﻿using QuizMaster.Contracts.Dto;
+using QuizMaster.Wpf.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,10 +20,43 @@ namespace QuizMaster.Wpf.Views
     /// </summary>
     public partial class DashboardView : UserControl
     {
-        private readonly MainDashboardDto _view;
-        public DashboardView()
+        private readonly IApiClient _apiClient;
+        private readonly IMessageDialogService _messageDialogService;
+
+        public DashboardView(
+            IApiClient apiClient,
+            IMessageDialogService messageDialogService)
         {
             InitializeComponent();
+
+            _apiClient = apiClient;
+            _messageDialogService = messageDialogService;
+
+            Loaded += DashboardView_Loaded;
+        }
+
+        private async void DashboardView_Loaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= DashboardView_Loaded;
+            await LoadDashboardAsync();
+        }
+
+        private async Task LoadDashboardAsync()
+        {
+            try
+            {
+                var dashboard = await _apiClient.GetAsync<MainDashboardDto>(
+                    "api/dashboard");
+
+                DataContext = dashboard;
+            }
+            catch (Exception ex)
+            {
+                _messageDialogService.ShowError(
+                    "Błąd",
+                    ex.Message,
+                    Window.GetWindow(this));
+            }
         }
     }
 }
