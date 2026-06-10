@@ -94,6 +94,7 @@ namespace QuizMaster.Wpf
                 _appSettings.SaveRememberLogin(EmailTextBox.Text, RememberMeCheckbox.IsChecked ?? false);
 
                 var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+                Application.Current.MainWindow = mainWindow;
                 mainWindow.Show();
 
                 Close();

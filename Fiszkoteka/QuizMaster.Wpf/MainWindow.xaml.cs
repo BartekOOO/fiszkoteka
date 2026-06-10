@@ -58,14 +58,10 @@ namespace QuizMaster.Wpf
 
             Dispatcher.Invoke(() =>
             {
-                _messageDialogService.ShowWarning(
-                    "Sesja wygasła",
-                    "Sesja wygasła - zaloguj się ponownie",
-                    this);
-
                 _appSession.Clear();
 
                 var loginWindow = _serviceProvider.GetRequiredService<LoginWindow>();
+                Application.Current.MainWindow = loginWindow;
                 loginWindow.Show();
 
                 Close();
@@ -97,6 +93,7 @@ namespace QuizMaster.Wpf
                 _appSession.Clear();
 
                 var loginWindow = _serviceProvider.GetRequiredService<LoginWindow>();
+                Application.Current.MainWindow = loginWindow;
                 loginWindow.Show();
 
                 Close();

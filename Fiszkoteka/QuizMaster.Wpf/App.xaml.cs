@@ -26,6 +26,7 @@ namespace QuizMaster.Wpf
             Services = services.BuildServiceProvider();
 
             var loginWindow = Services.GetRequiredService<LoginWindow>();
+            MainWindow = loginWindow;
             loginWindow.Show();
         }
 

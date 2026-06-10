@@ -41,19 +41,55 @@ namespace QuizMaster.Wpf.Services
             Window owner)
         {
             var dialog = new MessageDialogWindow(title, message, type);
+            var dialogOwner = ResolveOwner(owner, dialog);
 
-            if (owner != null)
+            if (dialogOwner != null)
             {
-                dialog.Owner = owner;
-            }
-            else if (Application.Current.MainWindow != null && Application.Current.MainWindow != dialog)
-            {
-                dialog.Owner = Application.Current.MainWindow;
+                try
+                {
+                    dialog.Owner = dialogOwner;
+                }
+                catch (InvalidOperationException)
+                {
+
+                }
             }
 
             dialog.ShowDialog();
 
             return dialog.Result;
+        }
+
+        private static Window ResolveOwner(Window owner, Window dialog)
+        {
+            if (CanUseAsOwner(owner, dialog))
+            {
+                return owner;
+            }
+
+            var mainWindow = Application.Current.MainWindow;
+
+            if (CanUseAsOwner(mainWindow, dialog))
+            {
+                return mainWindow;
+            }
+
+            return null;
+        }
+
+        private static bool CanUseAsOwner(Window candidate, Window dialog)
+        {
+            if (candidate == null || ReferenceEquals(candidate, dialog))
+            {
+                return false;
+            }
+
+            if (!candidate.IsLoaded)
+            {
+                return false;
+            }
+
+            return PresentationSource.FromVisual(candidate) != null;
         }
     }
 }

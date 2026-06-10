@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 
@@ -29,6 +30,8 @@ namespace QuizMaster.Wpf.Services
             string path,
             CancellationToken cancellationToken = default)
         {
+            SetAuthorizationHeader();
+
             var response = await _httpClient.GetAsync(path, cancellationToken);
 
             await EnsureSuccessAsync(response, cancellationToken);
@@ -41,6 +44,8 @@ namespace QuizMaster.Wpf.Services
             TRequest payload,
             CancellationToken cancellationToken = default)
         {
+            SetAuthorizationHeader();
+
             var response = await _httpClient.PostAsJsonAsync(
                 path,
                 payload,
@@ -56,6 +61,8 @@ namespace QuizMaster.Wpf.Services
             TRequest payload,
             CancellationToken cancellationToken = default)
         {
+            SetAuthorizationHeader();
+
             var response = await _httpClient.PostAsJsonAsync(
                 path,
                 payload,
@@ -68,6 +75,8 @@ namespace QuizMaster.Wpf.Services
             string path,
             CancellationToken cancellationToken = default)
         {
+            SetAuthorizationHeader();
+
             var response = await _httpClient.PostAsync(
                 path,
                 null,
@@ -81,6 +90,8 @@ namespace QuizMaster.Wpf.Services
             TRequest payload,
             CancellationToken cancellationToken = default)
         {
+            SetAuthorizationHeader();
+
             var response = await _httpClient.PutAsJsonAsync(
                 path,
                 payload,
@@ -96,6 +107,8 @@ namespace QuizMaster.Wpf.Services
             TRequest payload,
             CancellationToken cancellationToken = default)
         {
+            SetAuthorizationHeader();
+
             var response = await _httpClient.PutAsJsonAsync(
                 path,
                 payload,
@@ -108,6 +121,8 @@ namespace QuizMaster.Wpf.Services
             string path,
             CancellationToken cancellationToken = default)
         {
+            SetAuthorizationHeader();
+
             var response = await _httpClient.DeleteAsync(path, cancellationToken);
 
             await EnsureSuccessAsync(response, cancellationToken);
@@ -144,6 +159,17 @@ namespace QuizMaster.Wpf.Services
                 throw new ServerResponseIsEmptyException();
 
             return result;
+        }
+
+        private void SetAuthorizationHeader()
+        {
+            _httpClient.DefaultRequestHeaders.Authorization = null;
+
+            if (string.IsNullOrWhiteSpace(_appSession.Token))
+                return;
+
+            _httpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", _appSession.Token);
         }
     }
 }
