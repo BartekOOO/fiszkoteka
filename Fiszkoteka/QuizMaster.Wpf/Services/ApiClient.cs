@@ -16,11 +16,13 @@ namespace QuizMaster.Wpf.Services
     {
         private readonly SessionEvents _sessionEvents;
         private readonly HttpClient _httpClient;
+        private readonly IAppSession _appSession;
 
-        public ApiClient(SessionEvents sessionEvents, HttpClient httpClient)
+        public ApiClient(SessionEvents sessionEvents, HttpClient httpClient, IAppSession appSession)
         {
             _sessionEvents = sessionEvents;
             _httpClient = httpClient;
+            _appSession = appSession;
         }
 
         public async Task<TResponse> GetAsync<TResponse>(
