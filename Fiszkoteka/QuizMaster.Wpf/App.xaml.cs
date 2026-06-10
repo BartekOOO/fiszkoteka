@@ -38,6 +38,11 @@ namespace QuizMaster.Wpf
                 client.BaseAddress = new Uri("https://localhost:7237");
             });
 
+            services.AddHttpClient<IApiClient, ApiClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://localhost:7237");
+            });
+
             services.AddTransient<LoginWindow>();
             services.AddTransient<MainWindow>();
             services.AddTransient<RegisterWindow>();
@@ -47,7 +52,14 @@ namespace QuizMaster.Wpf
             services.AddTransient<SettingsView>();
             services.AddSingleton<IAppSession, AppSession>();
             services.AddSingleton<IAppSettings, AppSettings>();
+            services.AddSingleton<SessionEvents>();
+            services.AddSingleton<ISessionEvents>(sp =>
+            {
+                var sessionEvents = sp.GetRequiredService<SessionEvents>();
+                return sessionEvents;
+            });
         }
     }
 
+}
 }

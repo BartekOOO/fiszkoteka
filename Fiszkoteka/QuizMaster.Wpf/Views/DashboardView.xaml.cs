@@ -1,4 +1,5 @@
-﻿using System;
+﻿using QuizMaster.Contracts.Dto;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -18,6 +19,7 @@ namespace QuizMaster.Wpf.Views
     /// </summary>
     public partial class DashboardView : UserControl
     {
+        private readonly MainDashboardDto _view;
         public DashboardView()
         {
             InitializeComponent();
