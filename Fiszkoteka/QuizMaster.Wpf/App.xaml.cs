@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using QuizMaster.Wpf.Interfaces;
 using QuizMaster.Wpf.Services;
+using QuizMaster.Wpf.Views;
 using System.Configuration;
 using System.Data;
 using System.Windows;
@@ -40,6 +41,10 @@ namespace QuizMaster.Wpf
             services.AddTransient<LoginWindow>();
             services.AddTransient<MainWindow>();
             services.AddTransient<RegisterWindow>();
+            services.AddTransient<DashboardView>();
+            services.AddTransient<FlashcardSetsView>();
+            services.AddTransient<LearningProgressView>();
+            services.AddTransient<SettingsView>();
             services.AddSingleton<IAppSession, AppSession>();
             services.AddSingleton<IAppSettings, AppSettings>();
         }
