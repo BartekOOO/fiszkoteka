@@ -107,6 +107,7 @@ namespace QuizMaster.Wpf.Windows
                     command);
 
                 OnCreatedFlashcardSet?.Invoke(this, createdSet.Id);
+                Close();
             }
             catch (Exception ex)
             {

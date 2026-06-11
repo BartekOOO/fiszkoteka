@@ -1,5 +1,7 @@
-﻿using QuizMaster.Contracts.Dto;
+﻿using Microsoft.Extensions.DependencyInjection;
+using QuizMaster.Contracts.Dto;
 using QuizMaster.Wpf.Interfaces;
+using QuizMaster.Wpf.Windows;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,10 +24,12 @@ namespace QuizMaster.Wpf.Views
     {
         private readonly IApiClient _apiClient;
         private readonly IMessageDialogService _messageDialogService;
+        private readonly IServiceProvider _serviceProvider;
 
         public DashboardView(
             IApiClient apiClient,
-            IMessageDialogService messageDialogService)
+            IMessageDialogService messageDialogService,
+            IServiceProvider serviceProvider)
         {
             InitializeComponent();
 
@@ -33,6 +37,7 @@ namespace QuizMaster.Wpf.Views
             _messageDialogService = messageDialogService;
 
             Loaded += DashboardView_Loaded;
+            _serviceProvider = serviceProvider;
         }
 
         private async void DashboardView_Loaded(object sender, RoutedEventArgs e)
@@ -49,6 +54,35 @@ namespace QuizMaster.Wpf.Views
                     "api/dashboard");
 
                 DataContext = dashboard;
+            }
+            catch (Exception ex)
+            {
+                _messageDialogService.ShowError(
+                    "Błąd",
+                    ex.Message,
+                    Window.GetWindow(this));
+            }
+        }
+
+        private void CreateFlashcardSet_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var createFlashcardSetWindow = _serviceProvider.GetRequiredService
+                    <CreateFlashcardSetWindow>();
+
+                createFlashcardSetWindow.Owner = Window.GetWindow(this);
+
+                createFlashcardSetWindow.OnCreatedFlashcardSet += async (sender, id) =>
+                {
+                    await LoadDashboardAsync();
+                    var editWindow = _serviceProvider.GetRequiredService
+                        <EditFlashcardSetWindow>();
+                    editWindow.Owner = Window.GetWindow(this);  
+                    editWindow.Show();
+                };
+
+                createFlashcardSetWindow.Show();
             }
             catch (Exception ex)
             {
