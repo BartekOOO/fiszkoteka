@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuizMaster.Application.Interfaces;
 using QuizMaster.Contracts.Commands.FlashcardSets;
+using QuizMaster.Contracts.Dto;
 using QuizMaster.Contracts.Exceptions;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Core.Models;
@@ -35,6 +36,7 @@ namespace QuizMaster.Application.Services
 
             var flashCardSet = command.ToFlashcardSet();
             flashCardSet.UserId = command.UserId;
+            flashCardSet.CreatedAt = DateTime.Now;
 
             var result = await _context.FlashcardSets.AddAsync(flashCardSet, cancellationToken);
 
@@ -95,18 +97,33 @@ namespace QuizMaster.Application.Services
             return result;
         }
 
-        public async Task<List<FlashcardSet>> GetFlashcardSets(int userId, CancellationToken cancellationToken = default)
+        public async Task<List<FlashcardSetListItemDto>> GetFlashcardSets(
+            int userId,
+            CancellationToken cancellationToken = default)
         {
-            var sets = await _context.FlashcardSets
+            return await _context.FlashcardSets
                 .AsNoTracking()
                 .Where(x => x.UserId == userId)
                 .OrderByDescending(x => x.CreatedAt)
-                .ToListAsync(cancellationToken);
+                .Select(x => new FlashcardSetListItemDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
 
-            return sets;
+                    CategoryId = x.CategoryId,
+                    CategoryName = x.Category.Name,
+
+                    FlashcardsCount = x.Flashcards.Count,
+
+                    IsPublic = x.IsPublic,
+                    CreatedAt = x.CreatedAt,
+                    Author = x.User.UserName
+                })
+                .ToListAsync(cancellationToken);
         }
 
-        public async Task<List<FlashcardSet>> GetPublicFlashcardSets(
+        public async Task<List<FlashcardSetListItemDto>> GetPublicFlashcardSets(
             string? userName,
             string? categoryName,
             CancellationToken cancellationToken)
@@ -124,7 +141,7 @@ namespace QuizMaster.Application.Services
                     .ToListAsync(cancellationToken);
 
                 if (userIds.Count == 0)
-                    return new List<FlashcardSet>();
+                    return new List<FlashcardSetListItemDto>();
 
                 setsQuery = setsQuery.Where(x => userIds.Contains(x.UserId));
             }
@@ -138,7 +155,7 @@ namespace QuizMaster.Application.Services
                     .ToListAsync(cancellationToken);
 
                 if (categoryIds.Count == 0)
-                    return new List<FlashcardSet>();
+                    return new List<FlashcardSetListItemDto>();
 
                 setsQuery = setsQuery.Where(x => categoryIds.Contains(x.CategoryId));
             }
@@ -148,7 +165,24 @@ namespace QuizMaster.Application.Services
 
             var sets = await setsQuery.ToListAsync(cancellationToken);
 
-            return sets;
+            return await setsQuery
+                .OrderByDescending(x => x.CreatedAt)
+                .Select(x => new FlashcardSetListItemDto
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    Description = x.Description,
+
+                    CategoryId = x.CategoryId,
+                    CategoryName = x.Category.Name,
+
+                    FlashcardsCount = x.Flashcards.Count,
+
+                    IsPublic = x.IsPublic,
+                    Author = x.User.UserName,
+                    CreatedAt = x.CreatedAt
+                })
+                .ToListAsync(cancellationToken);
         }
 
         public async Task UpdateFlashcardSet(int id, UpdateFlashcardSetCommand command, CancellationToken cancellationToken)

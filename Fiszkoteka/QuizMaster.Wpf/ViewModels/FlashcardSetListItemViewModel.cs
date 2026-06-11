@@ -1,4 +1,5 @@
-﻿using QuizMaster.Core.Models;
+﻿using QuizMaster.Contracts.Dto;
+using QuizMaster.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -32,7 +33,7 @@ namespace QuizMaster.Wpf.ViewModels
 
         public string CreatedAtText => $"Utworzono {CreatedAt:dd.MM.yyyy}";
 
-        public FlashcardSetListItemViewModel(FlashcardSet set)
+        public FlashcardSetListItemViewModel(FlashcardSetListItemDto set)
         {
             Id = set.Id;
             Name = string.IsNullOrWhiteSpace(set.Name)
@@ -43,9 +44,9 @@ namespace QuizMaster.Wpf.ViewModels
                 ? "Brak opisu"
                 : set.Description;
 
-            CategoryName = set.Category?.Name;
+            CategoryName = set.CategoryName;
 
-            FlashcardsCount = set.Flashcards?.Count ?? 0;
+            FlashcardsCount = set.FlashcardsCount;
 
             IsPublic = set.IsPublic;
             CreatedAt = set.CreatedAt;

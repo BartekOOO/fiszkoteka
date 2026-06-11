@@ -1,12 +1,471 @@
 ﻿<Window x:Class="QuizMaster.Wpf.Windows.EditFlashcardSetWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:QuizMaster.Wpf.Windows"
-        mc:Ignorable="d"
-        Title="EditFlashcardSetWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Edycja zestawu fiszek"
+        Width="920"
+        Height="720"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#F8FAFC">
+
+    <Window.Resources>
+
+        <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="9">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="MultilineTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Height" Value="78"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+            <Setter Property="AcceptsReturn" Value="True"/>
+            <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="9">
+                            <ScrollViewer x:Name="PART_ContentHost"
+                                          Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryLocalButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="#2563EB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="SecondaryLocalButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Background" Value="#E0E7FF"/>
+            <Setter Property="Foreground" Value="#2563EB"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="DangerLocalButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="34"/>
+            <Setter Property="Background" Value="#FEE2E2"/>
+            <Setter Property="Foreground" Value="#DC2626"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="ModernComboBoxStyle" TargetType="ComboBox">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+
+                            <Border x:Name="MainBorder"
+                            Background="White"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="9"/>
+
+                            <ToggleButton Focusable="False"
+                                  ClickMode="Press"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  IsChecked="{Binding IsDropDownOpen,
+                                                      Mode=TwoWay,
+                                                      RelativeSource={RelativeSource TemplatedParent}}">
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="40"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0"
+                                       Text="{Binding SelectedItem.Name,
+                                                      RelativeSource={RelativeSource TemplatedParent}}"
+                                       Margin="12,0,0,0"
+                                       VerticalAlignment="Center"
+                                       FontSize="14"
+                                       Foreground="#0F172A"
+                                       TextTrimming="CharacterEllipsis"/>
+
+                                    <Path Grid.Column="1"
+                                  Width="10"
+                                  Height="6"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Fill="#475569"
+                                  Data="M 0 0 L 5 6 L 10 0 Z"/>
+                                </Grid>
+                            </ToggleButton>
+
+                            <Popup Placement="Bottom"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           AllowsTransparency="True"
+                           Focusable="False"
+                           PopupAnimation="Slide">
+
+                                <Border Width="{Binding ActualWidth,
+                                                RelativeSource={RelativeSource TemplatedParent}}"
+                                MaxHeight="180"
+                                Background="White"
+                                BorderBrush="#CBD5E1"
+                                BorderThickness="1"
+                                CornerRadius="9"
+                                Margin="0,4,0,0">
+
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="MainBorder"
+                                Property="BorderBrush"
+                                Value="#94A3B8"/>
+                            </Trigger>
+
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="MainBorder"
+                                Property="BorderBrush"
+                                Value="#2563EB"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernComboBoxItemStyle" TargetType="ComboBoxItem">
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="Padding" Value="12,0"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#0F172A"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="ItemBorder"
+                        Background="{TemplateBinding Background}"
+                        Padding="{TemplateBinding Padding}">
+                            <ContentPresenter VerticalAlignment="Center"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="ItemBorder"
+                                Property="Background"
+                                Value="#EEF2FF"/>
+                            </Trigger>
+
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="ItemBorder"
+                                Property="Background"
+                                Value="#E0E7FF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid Background="#F8FAFC">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- HEADER / DANE ZESTAWU -->
+        <Border Grid.Row="0"
+                Background="White"
+                CornerRadius="0,0,18,18"
+                Padding="28"
+                Margin="0,0,0,18">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="18"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <TextBlock Text="Edycja zestawu"
+                               FontSize="30"
+                               FontWeight="Bold"
+                               Foreground="#0F172A"/>
+
+                    <TextBlock Text="Zmień podstawowe dane zestawu oraz zarządzaj fiszkami."
+                               FontSize="14"
+                               Foreground="#64748B"
+                               Margin="0,6,0,0"/>
+                </StackPanel>
+
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="220"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="12"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Nazwa -->
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="0"
+                               Text="Nazwa zestawu"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="#334155"
+                               Margin="0,0,0,6"/>
+
+                    <TextBox Grid.Row="1"
+                             Grid.Column="0"
+                             x:Name="NameTextBox"
+                             Style="{StaticResource InputTextBoxStyle}"
+                             Margin="0,0,18,0"/>
+
+                    <!-- Kategoria -->
+                    <TextBlock Grid.Row="0"
+                               Grid.Column="1"
+                               Text="Kategoria"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="#334155"
+                               Margin="0,0,0,6"/>
+
+                    <ComboBox Grid.Row="1"
+                        Grid.Column="1"
+                        x:Name="CategoryComboBox"
+                        Style="{StaticResource ModernComboBoxStyle}"
+                        ItemContainerStyle="{StaticResource ModernComboBoxItemStyle}"
+                        SelectedValuePath="Id">
+
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}"
+                                    FontSize="14"
+                                    Foreground="#0F172A"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <!-- Opis -->
+                    <TextBlock Grid.Row="3"
+                               Grid.Column="0"
+                               Grid.ColumnSpan="2"
+                               Text="Opis"
+                               FontSize="13"
+                               FontWeight="SemiBold"
+                               Foreground="#334155"
+                               Margin="0,0,0,6"/>
+
+                    <TextBox Grid.Row="4"
+                             Grid.Column="0"
+                             Grid.ColumnSpan="2"
+                             x:Name="DescriptionTextBox"
+                             Style="{StaticResource MultilineTextBoxStyle}"/>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- FISZKI -->
+        <Border Grid.Row="1"
+                Background="White"
+                CornerRadius="18"
+                Padding="22"
+                Margin="28,0,28,18">
+
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="14"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <DockPanel Grid.Row="0">
+                    <StackPanel DockPanel.Dock="Left">
+                        <TextBlock Text="Fiszki w zestawie"
+                                   FontSize="22"
+                                   FontWeight="Bold"
+                                   Foreground="#0F172A"/>
+
+                        <TextBlock Text="Dodawaj, edytuj i usuwaj fiszki przypisane do tego zestawu."
+                                   FontSize="13"
+                                   Foreground="#64748B"
+                                   Margin="0,4,0,0"/>
+                    </StackPanel>
+
+                    <Button Content="+ Dodaj fiszkę"
+                            Width="130"
+                            Height="38"
+                            Style="{StaticResource PrimaryLocalButtonStyle}"
+                            HorizontalAlignment="Right"
+                            DockPanel.Dock="Right"
+                            Click="AddFlashcardButton_Click"/>
+                </DockPanel>
+
+                <Grid Grid.Row="2">
+
+                    <TextBlock x:Name="EmptyFlashcardsTextBlock"
+                               Text="Ten zestaw nie ma jeszcze żadnych fiszek."
+                               FontSize="15"
+                               Foreground="#64748B"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Visibility="Collapsed"/>
+
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ItemsControl x:Name="FlashcardsItemsControl">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#F8FAFC"
+                                            BorderBrush="#E2E8F0"
+                                            BorderThickness="1"
+                                            CornerRadius="14"
+                                            Padding="16"
+                                            Margin="0,0,0,12">
+
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <StackPanel Grid.Column="0">
+                                                <TextBlock Text="{Binding Question}"
+                                                           FontSize="16"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#0F172A"
+                                                           TextWrapping="Wrap"/>
+
+                                                <TextBlock Text="{Binding Answer}"
+                                                           FontSize="14"
+                                                           Foreground="#475569"
+                                                           TextWrapping="Wrap"
+                                                           Margin="0,6,0,0"/>
+
+                                                <TextBlock Text="{Binding HintText}"
+                                                           FontSize="12"
+                                                           Foreground="#94A3B8"
+                                                           TextWrapping="Wrap"
+                                                           Margin="0,6,0,0"/>
+                                            </StackPanel>
+
+                                            <StackPanel Grid.Column="1"
+                                                        Orientation="Horizontal"
+                                                        VerticalAlignment="Center"
+                                                        Margin="16,0,0,0">
+
+                                                <Button Content="Edytuj"
+                                                        Width="80"
+                                                        Height="34"
+                                                        Tag="{Binding Id}"
+                                                        Style="{StaticResource SecondaryLocalButtonStyle}"
+                                                        Click="EditFlashcardButton_Click"
+                                                        Margin="0,0,8,0"/>
+
+                                                <Button Content="Usuń"
+                                                        Width="75"
+                                                        Height="34"
+                                                        Tag="{Binding Id}"
+                                                        Style="{StaticResource DangerLocalButtonStyle}"
+                                                        Click="DeleteFlashcardButton_Click"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- FOOTER -->
+        <Border Grid.Row="2"
+                Background="White"
+                Padding="22"
+                BorderBrush="#E2E8F0"
+                BorderThickness="0,1,0,0">
+
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+
+                <Button Content="Anuluj"
+                        Width="110"
+                        Style="{StaticResource SecondaryLocalButtonStyle}"
+                        Background="#E2E8F0"
+                        Foreground="#334155"
+                        Margin="0,0,10,0"
+                        Click="CancelButton_Click"/>
+
+                <Button Content="Zapisz"
+                        Width="110"
+                        Style="{StaticResource SecondaryLocalButtonStyle}"
+                        Margin="0,0,10,0"
+                        Click="SaveButton_Click"/>
+
+                <Button Content="Zapisz i zamknij"
+                        Width="150"
+                        Style="{StaticResource PrimaryLocalButtonStyle}"
+                        Click="SaveAndCloseButton_Click"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

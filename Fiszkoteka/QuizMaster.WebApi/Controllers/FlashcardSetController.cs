@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using QuizMaster.Contracts.Auth;
 using QuizMaster.Contracts.Commands.FlashcardSets;
+using QuizMaster.Contracts.Dto;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Core.Models;
 using QuizMaster.WebApi.Extensions;
@@ -36,7 +37,7 @@ namespace QuizMaster.WebApi.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(List<FlashcardSet>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<FlashcardSetListItemDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetFlashcardSets(
             CancellationToken cancellationToken)
         {
@@ -48,7 +49,7 @@ namespace QuizMaster.WebApi.Controllers
         }
 
         [HttpGet("public")]
-        [ProducesResponseType(typeof(List<FlashcardSet>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<FlashcardSetListItemDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetPublicFlashcardSets(
             [FromQuery] string? byUserName,
             [FromQuery] string? byCategory,

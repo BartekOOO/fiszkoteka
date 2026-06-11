@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using QuizMaster.Contracts.Commands.Flashcards;
 using QuizMaster.Wpf.Interfaces;
 using QuizMaster.Wpf.Services;
 using QuizMaster.Wpf.Views;
@@ -53,6 +54,7 @@ namespace QuizMaster.Wpf
             services.AddTransient<LearningProgressView>();
             services.AddTransient<EditFlashcardSetWindow>();
             services.AddTransient<CreateFlashcardSetWindow>();
+            services.AddTransient<CreateFlashcardCommand>();
 
             services.AddTransient<SettingsView>();
             services.AddSingleton<IAppSession, AppSession>();

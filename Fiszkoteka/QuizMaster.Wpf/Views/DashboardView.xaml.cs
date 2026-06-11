@@ -64,7 +64,7 @@ namespace QuizMaster.Wpf.Views
             }
         }
 
-        private void CreateFlashcardSet_Click(object sender, RoutedEventArgs e)
+        private async void CreateFlashcardSet_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -78,7 +78,14 @@ namespace QuizMaster.Wpf.Views
                     await LoadDashboardAsync();
                     var editWindow = _serviceProvider.GetRequiredService
                         <EditFlashcardSetWindow>();
-                    editWindow.Owner = Window.GetWindow(this);  
+                    editWindow.Owner = Window.GetWindow(this);
+
+                    editWindow.Saved += async (s) =>
+                    {
+                        await LoadDashboardAsync();
+                    };
+
+                    await editWindow.LoadAsync(id);
                     editWindow.Show();
                 };
 

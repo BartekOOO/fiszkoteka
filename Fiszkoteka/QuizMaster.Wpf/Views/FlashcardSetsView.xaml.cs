@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using QuizMaster.Contracts.Commands.Learning;
+using QuizMaster.Contracts.Dto;
 using QuizMaster.Core.Dto;
 using QuizMaster.Core.Models;
 using QuizMaster.Wpf.Interfaces;
@@ -57,7 +58,7 @@ namespace QuizMaster.Wpf.Views
         {
             try
             {
-                var flashcardSets = await _apiClient.GetAsync<List<FlashcardSet>>(
+                var flashcardSets = await _apiClient.GetAsync<List<FlashcardSetListItemDto>>(
                     "api/flashcardset");
 
                 _sets.Clear();
@@ -139,7 +140,7 @@ namespace QuizMaster.Wpf.Views
             }
         }
 
-        private void EditButton_Click(object sender, RoutedEventArgs e)
+        private async void EditButton_Click(object sender, RoutedEventArgs e)
         {
             if (sender is not Button button)
                 return;
@@ -149,7 +150,17 @@ namespace QuizMaster.Wpf.Views
 
             try
             {
-                throw new NotImplementedException("Do zaimplementowania");
+                var editWindow = _serviceProvider.GetRequiredService
+                    <EditFlashcardSetWindow>();
+                editWindow.Owner = Window.GetWindow(this);
+                editWindow.Saved += async (s) =>
+                {
+                    await LoadFlashcardSetsAsync();
+                };
+
+                await editWindow.LoadAsync(flashcardSetId);
+                editWindow.Show();
+
             }
             catch (Exception ex)
             {
