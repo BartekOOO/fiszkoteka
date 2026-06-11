@@ -37,7 +37,8 @@ namespace QuizMaster.WebApi.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(List<FlashcardSet>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetFlashcardSets(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetFlashcardSets(
+            CancellationToken cancellationToken)
         {
             var result = await _flashcardSetService.GetFlashcardSets(
                 this.GetCurrentUserId(),
@@ -48,9 +49,15 @@ namespace QuizMaster.WebApi.Controllers
 
         [HttpGet("public")]
         [ProducesResponseType(typeof(List<FlashcardSet>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetPublicFlashcardSets(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetPublicFlashcardSets(
+            [FromQuery] string? byUserName,
+            [FromQuery] string? byCategory,
+            CancellationToken cancellationToken)
         {
-            var result = await _flashcardSetService.GetPublicFlashcardSets(cancellationToken);
+            var result = await _flashcardSetService.GetPublicFlashcardSets(
+                byUserName,
+                byCategory,
+                cancellationToken);
             return Ok(result);
         }
 

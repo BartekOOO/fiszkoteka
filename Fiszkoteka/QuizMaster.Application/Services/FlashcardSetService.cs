@@ -106,13 +106,47 @@ namespace QuizMaster.Application.Services
             return sets;
         }
 
-        public async Task<List<FlashcardSet>> GetPublicFlashcardSets(CancellationToken cancellationToken)
+        public async Task<List<FlashcardSet>> GetPublicFlashcardSets(
+            string? userName,
+            string? categoryName,
+            CancellationToken cancellationToken)
         {
-            var sets = await _context.FlashcardSets
+            var setsQuery = _context.FlashcardSets
                 .AsNoTracking()
-                .Where(x => x.IsPublic)
-                .OrderByDescending(x => x.CreatedAt)
-                .ToListAsync(cancellationToken);
+                .Where(x => x.IsPublic);
+
+            if (userName is not null)
+            {
+                var userIds = await _context.Users
+                    .AsNoTracking()
+                    .Where(x => EF.Functions.Like(x.UserName, $"%{userName}%"))
+                    .Select(x => x.Id)
+                    .ToListAsync(cancellationToken);
+
+                if (userIds.Count == 0)
+                    return new List<FlashcardSet>();
+
+                setsQuery = setsQuery.Where(x => userIds.Contains(x.UserId));
+            }
+
+            if(categoryName is not null)
+            {
+                var categoryIds = await _context.Categories
+                    .AsNoTracking()
+                    .Where(x => EF.Functions.Like(x.Name, $"%{categoryName}%"))
+                    .Select(x => x.Id)
+                    .ToListAsync(cancellationToken);
+
+                if (categoryIds.Count == 0)
+                    return new List<FlashcardSet>();
+
+                setsQuery = setsQuery.Where(x => categoryIds.Contains(x.CategoryId));
+            }
+
+            setsQuery = setsQuery
+                .OrderByDescending(x => x.CreatedAt);
+
+            var sets = await setsQuery.ToListAsync(cancellationToken);
 
             return sets;
         }

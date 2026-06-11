@@ -60,6 +60,9 @@ namespace QuizMaster.Wpf.Extensions
                 case nameof(ActiveLearningSessionExistsException):
                     throw ActiveLearningSessionExistsException.FromMessage(error.Message);
 
+                case nameof(UserNotExistsException):
+                    throw UserNotExistsException.FromMessage(error.Message);
+
                 default:
                     throw new Exception(error.Message ?? "Wystąpił nieznany błąd.");
             }

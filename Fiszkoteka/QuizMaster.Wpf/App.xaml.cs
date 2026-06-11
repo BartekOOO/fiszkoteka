@@ -2,6 +2,7 @@
 using QuizMaster.Wpf.Interfaces;
 using QuizMaster.Wpf.Services;
 using QuizMaster.Wpf.Views;
+using QuizMaster.Wpf.Windows;
 using System.Configuration;
 using System.Data;
 using System.Windows;
@@ -50,6 +51,28 @@ namespace QuizMaster.Wpf
             services.AddTransient<DashboardView>();
             services.AddTransient<FlashcardSetsView>();
             services.AddTransient<LearningProgressView>();
+            services.AddTransient<EditFlashcardSetWindow>();
+            services.AddTransient<CreateFlashcardSetWindow>(sp =>
+            {
+                var window = new CreateFlashcardSetWindow(
+                    sp.GetRequiredService<IApiClient>(),
+                    sp.GetRequiredService<IMessageDialogService>());
+
+                window.OnCreatedFlashcardSet += (sender, id) =>
+                {
+                    var editWindow = sp.GetRequiredService<EditFlashcardSetWindow>();
+
+                    if (sender is CreateFlashcardSetWindow createWindow)
+                    {
+                        editWindow.Owner = createWindow.Owner;
+                        editWindow.Show();
+                        createWindow.Close();
+                    }
+                };
+
+                return window;
+            });
+
             services.AddTransient<SettingsView>();
             services.AddSingleton<IAppSession, AppSession>();
             services.AddSingleton<IAppSettings, AppSettings>();

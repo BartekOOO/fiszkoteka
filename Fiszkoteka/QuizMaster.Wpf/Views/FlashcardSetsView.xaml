@@ -1,12 +1,169 @@
 ﻿<UserControl x:Class="QuizMaster.Wpf.Views.FlashcardSetsView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:QuizMaster.Wpf.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="650"
+             d:DesignWidth="850">
+
+    <Grid Background="#F8FAFC">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <DockPanel Grid.Row="0"
+                   Margin="0,0,0,24">
+
+            <StackPanel DockPanel.Dock="Left">
+                <TextBlock Text="Moje zestawy"
+                           FontSize="30"
+                           FontWeight="Bold"
+                           Foreground="#0F172A"/>
+
+                <TextBlock Text="Zarządzaj swoimi zestawami fiszek i rozpocznij naukę."
+                           FontSize="15"
+                           Foreground="#64748B"
+                           Margin="0,6,0,0"/>
+            </StackPanel>
+
+            <Button Content="+ Nowy zestaw"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Width="140"
+                    HorizontalAlignment="Right"
+                    DockPanel.Dock="Right"
+                    Click="CreateSetButton_Click"/>
+        </DockPanel>
+
+        
+
+        <!-- Lista zestawów -->
+        <Border Grid.Row="2"
+                Style="{StaticResource CardStyle}"
+                Margin="0"
+                Padding="0">
+
+            <Grid>
+                <TextBlock x:Name="EmptyStateTextBlock"
+                           Text="Nie masz jeszcze żadnych zestawów fiszek."
+                           FontSize="16"
+                           Foreground="#64748B"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Visibility="Collapsed"/>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                              Padding="22">
+
+                    <ItemsControl x:Name="FlashcardSetsItemsControl">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+
+                                <Border Background="#F8FAFC"
+                                        CornerRadius="14"
+                                        Padding="18"
+                                        Margin="0,0,0,14"
+                                        BorderBrush="#E2E8F0"
+                                        BorderThickness="1">
+
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <!-- Info -->
+                                        <StackPanel Grid.Column="0">
+
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontSize="18"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="#0F172A"/>
+
+                                                <Border Background="#E0E7FF"
+                                                        CornerRadius="8"
+                                                        Padding="8,3"
+                                                        Margin="10,0,0,0"
+                                                        VerticalAlignment="Center">
+
+                                                    <TextBlock Text="{Binding VisibilityText}"
+                                                               Foreground="#2563EB"
+                                                               FontSize="12"
+                                                               FontWeight="SemiBold"/>
+                                                </Border>
+                                            </StackPanel>
+
+                                            <TextBlock Text="{Binding Description}"
+                                                       FontSize="13"
+                                                       Foreground="#64748B"
+                                                       TextWrapping="Wrap"
+                                                       Margin="0,8,0,0"/>
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="0,12,0,0">
+
+                                                <TextBlock Text="{Binding FlashcardsText}"
+                                                           FontSize="13"
+                                                           Foreground="#475569"
+                                                           Margin="0,0,16,0"/>
+
+                                                <TextBlock Text="{Binding CategoryText}"
+                                                           FontSize="13"
+                                                           Foreground="#475569"
+                                                           Margin="0,0,16,0"/>
+
+                                                <TextBlock Text="{Binding CreatedAtText}"
+                                                           FontSize="13"
+                                                           Foreground="#475569"/>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <!-- Akcje -->
+                                        <StackPanel Grid.Column="1"
+                                                    Orientation="Horizontal"
+                                                    VerticalAlignment="Center"
+                                                    Margin="18,0,0,0">
+
+                                            <Button Content="Ucz się"
+                                                    Width="90"
+                                                    Height="34"
+                                                    Tag="{Binding Id}"
+                                                    Style="{StaticResource PrimaryButtonStyle}"
+                                                    Click="LearnButton_Click"
+                                                    Margin="0,0,8,0"/>
+
+                                            <Button Content="Edytuj"
+                                                    Width="80"
+                                                    Height="34"
+                                                    Tag="{Binding Id}"
+                                                    Style="{StaticResource SecondaryButtonStyle}"
+                                                    Click="EditButton_Click"
+                                                    Margin="0,0,8,0"/>
+
+                                            <Button Content="Usuń"
+                                                    Width="75"
+                                                    Height="34"
+                                                    Tag="{Binding Id}"
+                                                    Background="#FEE2E2"
+                                                    Foreground="#DC2626"
+                                                    BorderThickness="0"
+                                                    Cursor="Hand"
+                                                    FontWeight="SemiBold"
+                                                    Click="DeleteButton_Click"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
     </Grid>
 </UserControl>
