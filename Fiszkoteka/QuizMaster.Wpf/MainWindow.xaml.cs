@@ -136,7 +136,8 @@ namespace QuizMaster.Wpf
                 DashboardButton,
                 FlashcardSetsButton,
                 LearningProgressButton,
-                SettingsButton
+                SettingsButton,
+                PublicFlashcardSetsButton
             };
 
             foreach (var button in buttons)
@@ -147,6 +148,12 @@ namespace QuizMaster.Wpf
 
             activeButton.Background = new SolidColorBrush(Color.FromRgb(51, 65, 85)); // #334155
             activeButton.Foreground = Brushes.White;
+        }
+
+        private void NavigateToPublicFlashcardSets(object sender, RoutedEventArgs e)
+        {
+            MainContentControl.Content = _serviceProvider.GetRequiredService<PublicFlashcardSetsView>();
+            SetActiveButton(PublicFlashcardSetsButton);
         }
     }
 }

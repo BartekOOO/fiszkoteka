@@ -92,6 +92,19 @@ namespace QuizMaster.WebApi.Controllers
             return Ok();
         }
 
+        [HttpPut("{id:int}/Copy")]
+        public async Task<IActionResult> CopyFlashcardSet(
+            [FromQuery] int id,
+            CancellationToken cancellationToken)
+        {
+            var result = await _flashcardSetService.CopyFlashcardSet(
+                id,
+                this.GetCurrentUserId(),
+                cancellationToken);
+
+            return Ok(result);
+        }
+
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteFlashcardSet(
             int id,

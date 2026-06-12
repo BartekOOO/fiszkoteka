@@ -12,5 +12,6 @@ namespace QuizMaster.Contracts.Interfaces
         Task<FlashcardSet> CreateFlashcardSet(CreateFlashcardSetCommand command, CancellationToken cancellationToken = default);
         Task UpdateFlashcardSet(int id, UpdateFlashcardSetCommand command, CancellationToken cancellationToken);
         Task DeleteFlashcardSet(int  id, int userId , CancellationToken cancellationToken = default);
+        Task<CopiedFlashcardSetDto> CopyFlashcardSet(int id, int userId, CancellationToken cancellationToken);
     }
 }

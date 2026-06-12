@@ -5,6 +5,7 @@ using QuizMaster.Contracts.Dto;
 using QuizMaster.Contracts.Exceptions;
 using QuizMaster.Contracts.Interfaces;
 using QuizMaster.Core.Models;
+using System.Runtime.CompilerServices;
 
 namespace QuizMaster.Application.Services
 {
@@ -17,6 +18,67 @@ namespace QuizMaster.Application.Services
         {
             _context = context;
             _authService = authService;
+        }
+
+        public async Task<CopiedFlashcardSetDto> CopyFlashcardSet(
+            int id,
+            int userId,
+            CancellationToken cancellationToken)
+        {
+            var sourceSet = await _context.FlashcardSets
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+            if (sourceSet is null)
+                throw new FlashcardSetNotFoundException(id);
+
+            if (sourceSet.UserId != userId && !sourceSet.IsPublic)
+                throw new FlashcardSetAccessDeniedException();
+
+            var sourceUserId = sourceSet.UserId;
+
+            var copiedSet = new FlashcardSet
+            {
+                Name = sourceSet.Name,
+                Description = sourceSet.Description,
+                CategoryId = sourceSet.CategoryId,
+                UserId = userId,
+                IsPublic = false,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.FlashcardSets.Add(copiedSet);
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            var sourceFlashcards = await _context.Flashcards
+                .AsNoTracking()
+                .Where(x => x.FlashcardSetId == id)
+                .ToListAsync(cancellationToken);
+
+            var copiedFlashcards = sourceFlashcards
+                .Select(x => new Flashcard
+                {
+                    Question = x.Question,
+                    Answer = x.Answer,
+                    FlashcardSetId = copiedSet.Id
+                })
+                .ToList();
+
+            _context.Flashcards.AddRange(copiedFlashcards);
+
+            var baseUser = await _context.Users
+                .AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == sourceUserId, cancellationToken);
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            return new CopiedFlashcardSetDto
+            {
+                FromUser = baseUser.UserName,
+                Id = copiedSet.Id,
+                Response = "Pomyślnie udało się skopiować zestaw"
+            };
         }
 
         public async Task<FlashcardSet> CreateFlashcardSet(CreateFlashcardSetCommand command, CancellationToken cancellationToken = default)
@@ -146,7 +208,7 @@ namespace QuizMaster.Application.Services
                 setsQuery = setsQuery.Where(x => userIds.Contains(x.UserId));
             }
 
-            if(categoryName is not null)
+            if (categoryName is not null)
             {
                 var categoryIds = await _context.Categories
                     .AsNoTracking()

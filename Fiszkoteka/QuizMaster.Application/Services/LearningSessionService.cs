@@ -36,7 +36,7 @@ namespace QuizMaster.Application.Services
             if (flashcardSet == null)
                 throw new FlashcardSetNotFoundException(command.FlashcardSetId);
 
-            if (!flashcardSet.IsPublic && flashcardSet.UserId != command.UserId)
+            if (flashcardSet.UserId != command.UserId)
                 throw new FlashcardSetAccessDeniedException();
 
             var totalFlashcardsCount = flashcardSet.Flashcards.Count;

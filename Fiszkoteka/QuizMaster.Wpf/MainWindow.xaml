@@ -49,6 +49,11 @@
                             x:Name="FlashcardSetsButton"
                             Style="{StaticResource SidebarButtonStyle}"/>
 
+                    <Button Content="🌍  Publiczne zestawy"
+                            Click="NavigateToPublicFlashcardSets"
+                            x:Name="PublicFlashcardSetsButton"
+                            Style="{StaticResource SidebarButtonStyle}"/>
+
 
                     <Button Content="📈  Postępy"
                             Click="NavigateToLearningProgress"

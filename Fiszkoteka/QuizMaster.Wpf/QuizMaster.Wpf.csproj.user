@@ -20,6 +20,9 @@
     <Compile Update="Views\LearningProgressView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\PublicFlashcardSetsView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\SettingsView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
