@@ -6,5 +6,5 @@ using System.Text;
 
 namespace QuizMaster.Wpf.Delegates
 {
-    public delegate bool CreateFlashcardHandler(object sender, CreateFlashcardCommand command, int flashcardSetId);
+    public delegate Task<bool> CreateFlashcardHandler(object sender, CreateFlashcardCommand command, int flashcardSetId);
 }

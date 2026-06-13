@@ -144,11 +144,6 @@ namespace QuizMaster.Wpf.Windows
             try
             {
                 await SaveAsync();
-
-                _messageDialogService.ShowError(
-                    "Zapisano",
-                    "Zestaw został zapisany.",
-                    this);
             }
             catch (Exception ex)
             {
@@ -185,17 +180,19 @@ namespace QuizMaster.Wpf.Windows
             var window = _serviceProvider.GetRequiredService
                 <EditFlashcardWindow>();
 
+            window.InitializeData(flashcardSetId: _flashcardSetId);
+
             window.Owner = this;
 
-            window.OnCreatedFlashcard += (s, c, i) =>
+            window.OnCreatedFlashcard += async (s, c, i) =>
             {
                 try
                 {
-                    var createdFlashcard = _apiClient.PostAsync<CreateFlashcardCommand, Flashcard>(
+                    var createdFlashcard = await _apiClient.PostAsync<CreateFlashcardCommand, Flashcard>(
                         "api/flashcard",
                         c);
 
-                    _flashcards.Add(new FlashcardListItemViewModel(createdFlashcard.Result));
+                    _flashcards.Add(new FlashcardListItemViewModel(createdFlashcard));
 
                     UpdateEmptyState();
 
@@ -243,38 +240,45 @@ namespace QuizMaster.Wpf.Windows
             window.Owner = this;
             window.Closed += (_, _) => this.Activate();
 
+            window.OnEditedFlashcard += async (s, f, i) =>
+            {
+                try
+                {
+                    //var command = new UpdateFlashcardCommand
+                    //{
+                    //    Question = window.Question,
+                    //    Answer = window.Answer,
+                    //    Hint = window.Hint,
+                    //    Difficulty = window.Difficulty
+                    //};
+
+                    //await _apiClient.PutAsync(
+                    //    $"api/flashcard/{flashcardId}",
+                    //    command);
+
+                    //item.Question = window.Question;
+                    //item.Answer = window.Answer;
+                    //item.Hint = window.Hint;
+                    //item.Difficulty = window.Difficulty;
+
+                    return true;
+
+                    FlashcardsItemsControl.Items.Refresh();
+
+                    Saved?.Invoke(this);
+                }
+                catch (Exception ex)
+                {
+                    _messageDialogService.ShowError(
+                        "Błąd",
+                        ex.Message,
+                        this);
+
+                    return false;
+                }
+            };
+
             window.Show();
-
-            try
-            {
-                //var command = new UpdateFlashcardCommand
-                //{
-                //    Question = window.Question,
-                //    Answer = window.Answer,
-                //    Hint = window.Hint,
-                //    Difficulty = window.Difficulty
-                //};
-
-                //await _apiClient.PutAsync(
-                //    $"api/flashcard/{flashcardId}",
-                //    command);
-
-                //item.Question = window.Question;
-                //item.Answer = window.Answer;
-                //item.Hint = window.Hint;
-                //item.Difficulty = window.Difficulty;
-
-                FlashcardsItemsControl.Items.Refresh();
-
-                Saved?.Invoke(this);
-            }
-            catch (Exception ex)
-            {
-                _messageDialogService.ShowError(
-                    "Błąd",
-                    ex.Message,
-                    this);
-            }
         }
 
         private async void DeleteFlashcardButton_Click(object sender, RoutedEventArgs e)

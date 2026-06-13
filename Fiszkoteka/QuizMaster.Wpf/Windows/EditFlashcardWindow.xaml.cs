@@ -42,12 +42,12 @@ namespace QuizMaster.Wpf.Windows
         }
 
         public void InitializeData(
-            string question,
-            string answer,
-            string hint,
-            DifficultyLevel difficulty,
-            int? flashcardSetId,
-            int? flashcardId)
+            string question = "",
+            string answer = "",
+            string hint = "",
+            DifficultyLevel difficulty = DifficultyLevel.Easy,
+            int? flashcardSetId = null,
+            int? flashcardId = null)
         {
             _flashcardSetId = flashcardSetId;
             _flashcardId = flashcardId;
@@ -111,7 +111,7 @@ namespace QuizMaster.Wpf.Windows
             return DifficultyLevel.Easy;
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             var question = QuestionTextBox.Text?.Trim();
             var answer = AnswerTextBox.Text?.Trim();
@@ -162,7 +162,7 @@ namespace QuizMaster.Wpf.Windows
                     return;
                 }
 
-                var result = OnCreatedFlashcard(
+                var result = await OnCreatedFlashcard(
                     this,
                     command,
                     _flashcardSetId!.Value);
@@ -190,7 +190,7 @@ namespace QuizMaster.Wpf.Windows
                     return;
                 }
 
-                var result = OnEditedFlashcard(
+                var result = await OnEditedFlashcard(
                     this,
                     command,
                     _flashcardId!.Value);

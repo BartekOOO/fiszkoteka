@@ -5,5 +5,5 @@ using System.Text;
 
 namespace QuizMaster.Wpf.Delegates
 {
-    public delegate bool EditFlashcardHandler(object sender, UpdateFlashcardCommand command, int id);
+    public delegate Task<bool> EditFlashcardHandler(object sender, UpdateFlashcardCommand command, int id);
 }
