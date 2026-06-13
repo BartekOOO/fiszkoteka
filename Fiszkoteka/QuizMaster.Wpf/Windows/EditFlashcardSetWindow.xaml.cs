@@ -1,4 +1,5 @@
-﻿using QuizMaster.Contracts.Commands.Flashcards;
+﻿using Microsoft.Extensions.DependencyInjection;
+using QuizMaster.Contracts.Commands.Flashcards;
 using QuizMaster.Contracts.Commands.FlashcardSets;
 using QuizMaster.Core.Enums;
 using QuizMaster.Core.Models;
@@ -27,6 +28,7 @@ namespace QuizMaster.Wpf.Windows
     {
         private readonly IApiClient _apiClient;
         private readonly IMessageDialogService _messageDialogService;
+        private readonly IServiceProvider _serviceProvider;
 
         private readonly ObservableCollection<FlashcardListItemViewModel> _flashcards;
 
@@ -37,7 +39,8 @@ namespace QuizMaster.Wpf.Windows
 
         public EditFlashcardSetWindow(
             IApiClient apiClient,
-            IMessageDialogService messageDialogService)
+            IMessageDialogService messageDialogService,
+            IServiceProvider serviceProvider)
         {
             InitializeComponent();
 
@@ -46,6 +49,7 @@ namespace QuizMaster.Wpf.Windows
 
             _flashcards = new ObservableCollection<FlashcardListItemViewModel>();
             FlashcardsItemsControl.ItemsSource = _flashcards;
+            _serviceProvider = serviceProvider;
         }
 
         public async Task LoadAsync(int flashcardSetId)
@@ -178,11 +182,12 @@ namespace QuizMaster.Wpf.Windows
 
         private async void AddFlashcardButton_Click(object sender, RoutedEventArgs e)
         {
-            var window = new EditFlashcardWindow();
+            var window = _serviceProvider.GetRequiredService
+                <EditFlashcardWindow>();
 
             window.Owner = this;
 
-            window.Show();
+            window.ShowDialog();
 
             try
             {

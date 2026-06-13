@@ -20,5 +20,10 @@ namespace QuizMaster.Contracts.Dto
         public string Author { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public FlashcardSetListItemDto()
+        {
+
+        }
     }
 }

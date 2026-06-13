@@ -24,7 +24,7 @@ namespace QuizMaster.WebApi.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(Flashcard), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateFlashcardSet(
+        public async Task<IActionResult> CreateFlashcard(
            [FromBody] CreateFlashcardCommand command,
            CancellationToken cancellationToken)
         {

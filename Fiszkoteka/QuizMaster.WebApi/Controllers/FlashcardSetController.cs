@@ -93,8 +93,9 @@ namespace QuizMaster.WebApi.Controllers
         }
 
         [HttpPut("{id:int}/Copy")]
+        [ProducesResponseType(typeof(CopiedFlashcardSetDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> CopyFlashcardSet(
-            [FromQuery] int id,
+            int id,
             CancellationToken cancellationToken)
         {
             var result = await _flashcardSetService.CopyFlashcardSet(

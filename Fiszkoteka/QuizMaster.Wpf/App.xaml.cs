@@ -56,6 +56,7 @@ namespace QuizMaster.Wpf
             services.AddTransient<CreateFlashcardSetWindow>();
             services.AddTransient<CreateFlashcardCommand>();
             services.AddTransient<PublicFlashcardSetsView>();
+            services.AddTransient<EditFlashcardWindow>();
 
             services.AddTransient<SettingsView>();
             services.AddSingleton<IAppSession, AppSession>();
