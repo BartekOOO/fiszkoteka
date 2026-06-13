@@ -24,7 +24,7 @@ namespace QuizMaster.Wpf.Windows
         private readonly IApiClient _apiClient;
         private readonly IMessageDialogService _messageDialogService;
 
-        public event CreatedFlashcardSetHandler OnCreatedFlashcardSet;
+        public event CreateFlashcardSetHandler OnCreatedFlashcardSet;
 
         public CreateFlashcardSetWindow(
             IApiClient apiClient,

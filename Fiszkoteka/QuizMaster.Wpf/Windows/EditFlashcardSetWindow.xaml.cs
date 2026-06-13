@@ -35,7 +35,7 @@ namespace QuizMaster.Wpf.Windows
         private int _flashcardSetId;
         private FlashcardSet _flashcardSet;
 
-        public event EditedFlashcardSetHandler Saved;
+        public event EditFlashcardSetHandler Saved;
 
         public EditFlashcardSetWindow(
             IApiClient apiClient,
@@ -187,36 +187,30 @@ namespace QuizMaster.Wpf.Windows
 
             window.Owner = this;
 
-            window.ShowDialog();
-
-            try
+            window.OnCreatedFlashcard += async (s, c) =>
             {
-                var command = new CreateFlashcardCommand
+                try
                 {
-                    FlashcardSetId = _flashcardSetId,
-                    Question = window.Question,
-                    Answer = window.Answer,
-                    Hint = window.Hint,
-                    Difficulty = window.Difficulty
-                };
+                    var createdFlashcard = await _apiClient.PostAsync<CreateFlashcardCommand, Flashcard>(
+                        "api/flashcard",
+                        c);
 
-                var createdFlashcard = await _apiClient.PostAsync<CreateFlashcardCommand, Flashcard>(
-                    "api/flashcard",
-                    command);
+                    _flashcards.Add(new FlashcardListItemViewModel(createdFlashcard));
 
-                _flashcards.Add(new FlashcardListItemViewModel(createdFlashcard));
+                    UpdateEmptyState();
 
-                UpdateEmptyState();
+                    Saved?.Invoke(this);
+                }
+                catch (Exception ex)
+                {
+                    _messageDialogService.ShowError(
+                        "Błąd",
+                        ex.Message,
+                        this);
+                }
+            };
 
-                Saved?.Invoke(this);
-            }
-            catch (Exception ex)
-            {
-                _messageDialogService.ShowError(
-                    "Błąd",
-                    ex.Message,
-                    this);
-            }
+            window.Show();
         }
 
         private async void EditFlashcardButton_Click(object sender, RoutedEventArgs e)

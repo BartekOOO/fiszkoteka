@@ -4,5 +4,5 @@ using System.Text;
 
 namespace QuizMaster.Wpf.Delegates
 {
-    public delegate void EditedFlashcardSetHandler(object sender);
+    public delegate void EditFlashcardSetHandler(object sender);
 }

@@ -1,4 +1,8 @@
-﻿using QuizMaster.Core.Enums;
+﻿using QuizMaster.Contracts.Commands.Flashcards;
+using QuizMaster.Core.Enums;
+using QuizMaster.Wpf.Delegates;
+using QuizMaster.Wpf.Enums;
+using QuizMaster.Wpf.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -18,30 +22,49 @@ namespace QuizMaster.Wpf.Windows
     /// </summary>
     public partial class EditFlashcardWindow : Window
     {
-        public string Question { get; private set; }
-        public string Answer { get; private set; }
-        public string Hint { get; private set; }
-        public DifficultyLevel Difficulty { get; private set; }
+        private readonly IMessageDialogService _messageDialogService;
 
-        public EditFlashcardWindow()
+        private WindowContext _context;
+        public WindowContext Context
         {
-            InitializeComponent();
-
-            Difficulty = DifficultyLevel.Easy;
+            get
+            {
+                if (_flashcardSetId is null && _flashcardId is null)
+                    throw new Exception("Nie zainicjalizowano okna");
+                return _context;
+            }
         }
 
-        public EditFlashcardWindow(
+        private int? _flashcardSetId;
+        private int? _flashcardId;
+
+        public CreateFlashcardHandler OnCreatedFlashcard;
+        public EditFlashcardHandler OnEditedFlashcard;
+
+
+        public EditFlashcardWindow(IMessageDialogService messageDialogService)
+        {
+            InitializeComponent();
+            _messageDialogService = messageDialogService;
+        }
+
+        public void InitializeData(
             string question,
             string answer,
             string hint,
-            DifficultyLevel difficulty)
-            : this()
+            DifficultyLevel difficulty,
+            int? flashcardSetId,
+            int? flashcardId)
         {
-            QuestionTextBox.Text = question;
-            AnswerTextBox.Text = answer;
-            HintTextBox.Text = hint;
+            _flashcardSetId = flashcardSetId;
+            _flashcardId = flashcardId;
 
-            Difficulty = difficulty;
+            if (_flashcardId is null && _flashcardSetId is null)
+                throw new Exception("Nie można określić kontekstu okna");
+
+            _context = WindowContext.Adding;
+            if (_flashcardId is not null)
+                _context = WindowContext.Editing;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -58,19 +81,56 @@ namespace QuizMaster.Wpf.Windows
                 return;
             }
 
-            Question = QuestionTextBox.Text.Trim();
-            Answer = AnswerTextBox.Text.Trim();
-            Hint = string.IsNullOrWhiteSpace(HintTextBox.Text)
-                ? null
-                : HintTextBox.Text.Trim();
+            if(Context == WindowContext.Adding)
+            {
+                var command = new CreateFlashcardCommand
+                {
+                    FlashcardSetId = _flashcardSetId!.Value,
+                    Question = QuestionTextBox.Text,
+                    Answer = AnswerTextBox.Text,
+                    Hint = HintTextBox.Text,
+                    Difficulty = DifficultyLevel.Easy //Do zaimplemntowania
+                };
 
-            DialogResult = true;
-            Close();
+                if(OnCreatedFlashcard is null)
+                {
+                    _messageDialogService.ShowError("Błąd",
+                        "Nie podpięto żadnego zdarzenia", this);
+                    return;
+                }
+
+                var result = OnCreatedFlashcard(this, command, _flashcardSetId!.Value);
+
+                if (result)
+                    Close();
+            }
+            else
+            {
+                var command = new UpdateFlashcardCommand
+                {
+                    Question = QuestionTextBox.Text,
+                    Answer = AnswerTextBox.Text,
+                    Hint = HintTextBox.Text,
+                    Difficulty = DifficultyLevel.Easy //Do zaimplemntowania
+                };
+
+                if (OnEditedFlashcard is null)
+                {
+                    _messageDialogService.ShowError("Błąd",
+                        "Nie podpięto żadnego zdarzenia", this);
+                    return;
+                }
+
+                var result = OnEditedFlashcard(this, command, _flashcardId!.Value);
+
+                if (result)
+                    Close();
+            }
+
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
             Close();
         }
     }

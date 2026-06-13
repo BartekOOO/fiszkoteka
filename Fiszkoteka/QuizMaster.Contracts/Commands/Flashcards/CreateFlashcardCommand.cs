@@ -12,7 +12,7 @@ namespace QuizMaster.Contracts.Commands.Flashcards
         public int FlashcardSetId { get; set; }
         public string Question { get; set; }
         public string Answer { get; set; }
-        public string Hint { get; set; }
+        public string? Hint { get; set; }
         public DifficultyLevel Difficulty { get; set; }
 
         public CreateFlashcardCommand()

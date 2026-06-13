@@ -47,7 +47,7 @@ namespace QuizMaster.Application.Services
                 FlashcardSetId = command.FlashcardSetId,
                 Question = command.Question.Trim(),
                 Answer = command.Answer.Trim(),
-                Hint = command.Hint.Trim(),
+                Hint = command.Hint?.Trim() ?? "",
                 Difficulty = command.Difficulty
             };
 
