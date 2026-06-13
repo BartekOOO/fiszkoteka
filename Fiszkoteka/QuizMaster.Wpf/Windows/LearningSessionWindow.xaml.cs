@@ -18,10 +18,11 @@ namespace QuizMaster.Wpf.Windows
 
         private LearningSessionDto _session;
         private LearningFlashcardDto _currentFlashcard;
-        private bool _isHintVisible;
 
         private bool _isAnswerVisible;
         private bool _isFlipping;
+        private bool _isHintVisible;
+        private bool _isSessionFinished;
 
         public LearningSessionWindow(
             IApiClient apiClient,
@@ -33,6 +34,7 @@ namespace QuizMaster.Wpf.Windows
             _messageDialogService = messageDialogService;
 
             SetAnswerButtonsEnabled(false);
+            FinishButton.Visibility = Visibility.Collapsed;
         }
 
         public async Task InitializeAsync(int sessionId)
@@ -40,6 +42,13 @@ namespace QuizMaster.Wpf.Windows
             _sessionId = sessionId;
 
             await LoadSessionAsync();
+
+            if (_session.IsFinished)
+            {
+                ShowSessionFinished();
+                return;
+            }
+
             await LoadNextFlashcardAsync();
         }
 
@@ -63,20 +72,22 @@ namespace QuizMaster.Wpf.Windows
                     $"api/learning-session/{_sessionId}/next-flashcard");
 
                 _isAnswerVisible = false;
+                _isHintVisible = false;
+                _isSessionFinished = false;
 
                 CardSideTextBlock.Text = "Pytanie";
                 CardTextBlock.Text = _currentFlashcard.Question;
+                CardFooterTextBlock.Text = "Kliknij kartę, aby zobaczyć odpowiedź.";
 
-                _isHintVisible = false;
-
-                HintTextBlock.Visibility = Visibility.Collapsed;
-                HintTextBlock.Text = string.Empty;
+                HideHint();
 
                 ShowHintButton.Visibility = string.IsNullOrWhiteSpace(_currentFlashcard.Hint)
                     ? Visibility.Collapsed
                     : Visibility.Visible;
 
                 ShowHintButton.Content = "Podpowiedź";
+
+                FinishButton.Visibility = Visibility.Collapsed;
 
                 SetAnswerButtonsEnabled(false);
             }
@@ -94,48 +105,10 @@ namespace QuizMaster.Wpf.Windows
             if (_isFlipping)
                 return;
 
+            if (_isSessionFinished)
+                return;
+
             FlipCard();
-        }
-
-        private void ShowHintButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (_currentFlashcard == null)
-                return;
-
-            if (string.IsNullOrWhiteSpace(_currentFlashcard.Hint))
-                return;
-
-            _isHintVisible = !_isHintVisible;
-
-            if (_isAnswerVisible)
-            {
-                CardSideTextBlock.Text = "Odpowiedź";
-                CardTextBlock.Text = _currentFlashcard.Answer;
-
-                ShowHintButton.Visibility = Visibility.Collapsed;
-                HintTextBlock.Visibility = Visibility.Visible;
-                HintTextBlock.Text = "Oceń, czy odpowiedziałeś poprawnie.";
-
-                SetAnswerButtonsEnabled(true);
-            }
-            else
-            {
-                CardSideTextBlock.Text = "Pytanie";
-                CardTextBlock.Text = _currentFlashcard.Question;
-
-                _isHintVisible = false;
-
-                HintTextBlock.Visibility = Visibility.Collapsed;
-                HintTextBlock.Text = string.Empty;
-
-                ShowHintButton.Visibility = string.IsNullOrWhiteSpace(_currentFlashcard.Hint)
-                    ? Visibility.Collapsed
-                    : Visibility.Visible;
-
-                ShowHintButton.Content = "Podpowiedź";
-
-                SetAnswerButtonsEnabled(false);
-            }
         }
 
         private void FlipCard()
@@ -155,21 +128,11 @@ namespace QuizMaster.Wpf.Windows
 
                 if (_isAnswerVisible)
                 {
-                    CardSideTextBlock.Text = "Odpowiedź";
-                    CardTextBlock.Text = _currentFlashcard.Answer;
-                    HintTextBlock.Text = "Oceń, czy odpowiedziałeś poprawnie.";
-                    SetAnswerButtonsEnabled(true);
+                    ShowAnswerSide();
                 }
                 else
                 {
-                    CardSideTextBlock.Text = "Pytanie";
-                    CardTextBlock.Text = _currentFlashcard.Question;
-
-                    HintTextBlock.Text = string.IsNullOrWhiteSpace(_currentFlashcard.Hint)
-                        ? "Kliknij kartę, aby zobaczyć odpowiedź."
-                        : $"Podpowiedź: {_currentFlashcard.Hint}";
-
-                    SetAnswerButtonsEnabled(false);
+                    ShowQuestionSide();
                 }
 
                 var showAnimation = new DoubleAnimation
@@ -194,6 +157,73 @@ namespace QuizMaster.Wpf.Windows
                 hideAnimation);
         }
 
+        private void ShowQuestionSide()
+        {
+            CardSideTextBlock.Text = "Pytanie";
+            CardTextBlock.Text = _currentFlashcard.Question;
+            CardFooterTextBlock.Text = "Kliknij kartę, aby zobaczyć odpowiedź.";
+
+            HideHint();
+
+            ShowHintButton.Visibility = string.IsNullOrWhiteSpace(_currentFlashcard.Hint)
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+
+            ShowHintButton.Content = "Podpowiedź";
+
+            SetAnswerButtonsEnabled(false);
+        }
+
+        private void ShowAnswerSide()
+        {
+            CardSideTextBlock.Text = "Odpowiedź";
+            CardTextBlock.Text = _currentFlashcard.Answer;
+            CardFooterTextBlock.Text = "Oceń, czy odpowiedziałeś poprawnie.";
+
+            HideHint();
+
+            ShowHintButton.Visibility = Visibility.Collapsed;
+
+            SetAnswerButtonsEnabled(true);
+        }
+
+        private void ShowHintButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentFlashcard == null)
+                return;
+
+            if (_isSessionFinished)
+                return;
+
+            if (_isAnswerVisible)
+                return;
+
+            if (string.IsNullOrWhiteSpace(_currentFlashcard.Hint))
+                return;
+
+            _isHintVisible = !_isHintVisible;
+
+            if (_isHintVisible)
+            {
+                HintTextBlock.Text = _currentFlashcard.Hint;
+                HintPanel.Visibility = Visibility.Visible;
+                ShowHintButton.Content = "Ukryj podpowiedź";
+            }
+            else
+            {
+                HideHint();
+                ShowHintButton.Content = "Podpowiedź";
+            }
+        }
+
+        private void HideHint()
+        {
+            _isHintVisible = false;
+
+            HintTextBlock.Text = string.Empty;
+            HintPanel.Visibility = Visibility.Collapsed;
+        }
+
         private async void CorrectButton_Click(object sender, RoutedEventArgs e)
         {
             await AnswerAsync(true);
@@ -207,6 +237,9 @@ namespace QuizMaster.Wpf.Windows
         private async Task AnswerAsync(bool isCorrect)
         {
             if (_currentFlashcard == null)
+                return;
+
+            if (!_isAnswerVisible)
                 return;
 
             try
@@ -256,26 +289,38 @@ namespace QuizMaster.Wpf.Windows
 
         private void ShowSessionFinished()
         {
+            _isSessionFinished = true;
             _currentFlashcard = null;
 
             CardSideTextBlock.Text = "Koniec";
             CardTextBlock.Text = "Sesja zakończona 🎉";
+            CardFooterTextBlock.Text = "Przerobiłeś wszystkie fiszki z tego zestawu.";
+
+            HideHint();
 
             ShowHintButton.Visibility = Visibility.Collapsed;
 
-            HintTextBlock.Visibility = Visibility.Visible;
-            HintTextBlock.Text = "Przerobiłeś wszystkie fiszki z tego zestawu.";
-
             SetAnswerButtonsEnabled(false);
+
+            FinishButton.Visibility = Visibility.Visible;
+
+            if (_session != null)
+            {
+                UpdateProgress(
+                    _session.TotalFlashcardsCount,
+                    _session.TotalFlashcardsCount);
+            }
         }
 
         private void SetAnswerButtonsEnabled(bool enabled)
         {
             CorrectButton.IsEnabled = enabled;
             WrongButton.IsEnabled = enabled;
+        }
 
-            CorrectButton.Opacity = enabled ? 1 : 0.55;
-            WrongButton.Opacity = enabled ? 1 : 0.55;
+        private void FinishButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

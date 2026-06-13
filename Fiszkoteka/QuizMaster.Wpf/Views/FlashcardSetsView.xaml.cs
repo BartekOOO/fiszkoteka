@@ -124,13 +124,14 @@ namespace QuizMaster.Wpf.Views
                     "api/learning-session/start",
                     command);
 
-                _messageDialogService.ShowError(
-                    "Sesja rozpoczęta",
-                    $"Rozpoczęto sesję nauki. Id sesji: {session.Id}",
-                    Window.GetWindow(this));
+                var learningWindow = _serviceProvider
+                    .GetRequiredService<LearningSessionWindow>();
 
-                throw new NotImplementedException("Do zaimplementowania");
+                learningWindow.Owner = Window.GetWindow(this);
+                learningWindow.Closed += (_, _) => Window.GetWindow(this).Activate();
+                await learningWindow.InitializeAsync(session.Id);
 
+                learningWindow.Show();
             }
             catch (Exception ex)
             {

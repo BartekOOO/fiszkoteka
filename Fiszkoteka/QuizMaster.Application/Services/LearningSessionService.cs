@@ -44,6 +44,15 @@ namespace QuizMaster.Application.Services
             if (totalFlashcardsCount == 0)
                 throw new EmptyFlashcardSetException(command.FlashcardSetId);
 
+            var sessionsCount = await _context.LearningSessions
+                .Where(x => 
+                    x.UserId == command.UserId
+                    && x.FinishedAt != null)
+                .CountAsync(cancellationToken);
+
+            if (sessionsCount > 5)
+                throw new TooManyActiveLearningSessionsException();
+
             var session = new LearningSession
             {
                 UserId = command.UserId,
