@@ -229,16 +229,21 @@ namespace QuizMaster.Wpf.Windows
             if (item == null)
                 return;
 
-            //var window = new EditFlashcardWindow(
-            //    item.Question,
-            //    item.Answer,
-            //    item.Hint,
-            //    item.Difficulty);
+            var window = _serviceProvider.GetRequiredService
+                <EditFlashcardWindow>();
 
-            //window.Owner = this;
+            window.InitializeData(
+                item.Question,
+                item.Answer,
+                item.Hint,
+                item.Difficulty,
+                null,
+                item.Id);
 
-            //if (window.ShowDialog() != true)
-            //    return;
+            window.Owner = this;
+            window.Closed += (_, _) => this.Activate();
+
+            window.Show();
 
             try
             {
