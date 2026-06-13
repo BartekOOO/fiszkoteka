@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using System.Text;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace QuizMaster.Application.Services
 {
@@ -328,6 +329,34 @@ namespace QuizMaster.Application.Services
                     IsFinished = x.FinishedAt.HasValue
                 })
                 .ToListAsync(cancellationToken);
+        }
+
+        public async Task FinishSession(int id, int userId, CancellationToken cancellationToken)
+        {
+            var session = await _context.LearningSessions
+                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+            if (session == null)
+                throw new LearningSessionNotFoundException(id);
+
+            if (session.UserId != userId)
+                throw new FlashcardSetAccessDeniedException();
+
+            if (session.IsFinished)
+                throw new LearningSessionFinishedException();
+
+            session.FinishedAt = DateTime.Now;
+
+            var sessionItemsToDelete = await _context.LearningSessionItems
+                .Where(x => x.LearningSessionId == id 
+                            && x.AnsweredAt == null)
+                .ToListAsync(cancellationToken);
+
+            _context.LearningSessionItems
+                .RemoveRange(sessionItemsToDelete);
+
+            await _context.SaveChangesAsync(cancellationToken);
+
         }
     }
 }

@@ -91,5 +91,18 @@ namespace QuizMaster.WebApi.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("{id:int}/finish")]
+        public async Task<IActionResult> FinishSession(
+            int id,
+            CancellationToken cancellationToken)
+        {
+            await _learningSessionService.FinishSession(
+                id,
+                this.GetCurrentUserId(),
+                cancellationToken);
+
+            return Ok();
+        }
     }
 }
