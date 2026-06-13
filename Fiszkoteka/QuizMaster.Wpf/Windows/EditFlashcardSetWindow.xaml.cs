@@ -187,19 +187,21 @@ namespace QuizMaster.Wpf.Windows
 
             window.Owner = this;
 
-            window.OnCreatedFlashcard += async (s, c) =>
+            window.OnCreatedFlashcard += (s, c, i) =>
             {
                 try
                 {
-                    var createdFlashcard = await _apiClient.PostAsync<CreateFlashcardCommand, Flashcard>(
+                    var createdFlashcard = _apiClient.PostAsync<CreateFlashcardCommand, Flashcard>(
                         "api/flashcard",
                         c);
 
-                    _flashcards.Add(new FlashcardListItemViewModel(createdFlashcard));
+                    _flashcards.Add(new FlashcardListItemViewModel(createdFlashcard.Result));
 
                     UpdateEmptyState();
 
                     Saved?.Invoke(this);
+
+                    return true;
                 }
                 catch (Exception ex)
                 {
@@ -207,6 +209,7 @@ namespace QuizMaster.Wpf.Windows
                         "Błąd",
                         ex.Message,
                         this);
+                    return false;
                 }
             };
 
@@ -226,35 +229,35 @@ namespace QuizMaster.Wpf.Windows
             if (item == null)
                 return;
 
-            var window = new EditFlashcardWindow(
-                item.Question,
-                item.Answer,
-                item.Hint,
-                item.Difficulty);
+            //var window = new EditFlashcardWindow(
+            //    item.Question,
+            //    item.Answer,
+            //    item.Hint,
+            //    item.Difficulty);
 
-            window.Owner = this;
+            //window.Owner = this;
 
-            if (window.ShowDialog() != true)
-                return;
+            //if (window.ShowDialog() != true)
+            //    return;
 
             try
             {
-                var command = new UpdateFlashcardCommand
-                {
-                    Question = window.Question,
-                    Answer = window.Answer,
-                    Hint = window.Hint,
-                    Difficulty = window.Difficulty
-                };
+                //var command = new UpdateFlashcardCommand
+                //{
+                //    Question = window.Question,
+                //    Answer = window.Answer,
+                //    Hint = window.Hint,
+                //    Difficulty = window.Difficulty
+                //};
 
-                await _apiClient.PutAsync(
-                    $"api/flashcard/{flashcardId}",
-                    command);
+                //await _apiClient.PutAsync(
+                //    $"api/flashcard/{flashcardId}",
+                //    command);
 
-                item.Question = window.Question;
-                item.Answer = window.Answer;
-                item.Hint = window.Hint;
-                item.Difficulty = window.Difficulty;
+                //item.Question = window.Question;
+                //item.Answer = window.Answer;
+                //item.Hint = window.Hint;
+                //item.Difficulty = window.Difficulty;
 
                 FlashcardsItemsControl.Items.Refresh();
 
