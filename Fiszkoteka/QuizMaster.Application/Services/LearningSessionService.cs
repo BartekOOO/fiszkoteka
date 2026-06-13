@@ -48,7 +48,7 @@ namespace QuizMaster.Application.Services
             var sessionsCount = await _context.LearningSessions
                 .Where(x => 
                     x.UserId == command.UserId
-                    && x.FinishedAt != null)
+                    && x.FinishedAt == null)
                 .CountAsync(cancellationToken);
 
             if (sessionsCount > 5)

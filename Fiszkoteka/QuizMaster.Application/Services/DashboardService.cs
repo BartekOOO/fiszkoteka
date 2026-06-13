@@ -42,12 +42,13 @@ namespace QuizMaster.Application.Services
                 .AsNoTracking()
                 .CountAsync(x => x.FlashcardSet.UserId == userId, cancellationToken);
 
-            var todayReviewedFlashcardsCount = await _context.UserFlashcardProgresses
+            var todayReviewedFlashcardsCount = await _context.LearningSessionItems
                 .AsNoTracking()
+                .Include(x => x.LearningSession)
                 .CountAsync(x =>
-                    x.UserId == userId &&
-                    x.LastReviewedAt >= today &&
-                    x.LastReviewedAt < tomorrow,
+                    x.LearningSession.UserId == userId &&
+                    x.AnsweredAt >= today &&
+                    x.AnsweredAt < tomorrow,
                     cancellationToken);
 
             var totalCorrectAnswers = await _context.UserFlashcardProgresses

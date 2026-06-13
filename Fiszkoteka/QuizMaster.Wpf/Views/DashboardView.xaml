@@ -199,9 +199,11 @@
                                         <Button Content="Ucz się"
                                                 Width="90"
                                                 Height="34"
+                                                Tag="{Binding Id}"
                                                 HorizontalAlignment="Right"
                                                 Style="{StaticResource SecondaryButtonStyle}"
-                                                DockPanel.Dock="Right"/>
+                                                DockPanel.Dock="Right"
+                                                Click="LearnButton_Click"/>
                                     </DockPanel>
                                 </Border>
 
@@ -254,50 +256,95 @@
 
                 <!-- Aktywne sesje -->
                 <Border Style="{StaticResource CardStyle}"
-                        Margin="0,0,0,18">
+        Margin="0,0,0,18">
 
                     <StackPanel>
                         <TextBlock Text="Kontynuuj naukę"
-                                   FontSize="20"
-                                   FontWeight="Bold"
-                                   Foreground="#0F172A"
-                                   Margin="0,0,0,16"/>
+                   FontSize="20"
+                   FontWeight="Bold"
+                   Foreground="#0F172A"
+                   Margin="0,0,0,16"/>
 
                         <ItemsControl ItemsSource="{Binding ActiveSessions}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
 
                                     <Border Background="#F8FAFC"
-                                            CornerRadius="12"
-                                            Padding="12"
-                                            Margin="0,0,0,10">
+                            CornerRadius="12"
+                            Padding="12"
+                            Margin="0,0,0,10"
+                            Cursor="Hand"
+                            Tag="{Binding Id}"
+                            MouseLeftButtonUp="ActiveSessionCard_MouseLeftButtonUp">
 
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding FlashcardSetName}"
-                                                       FontSize="14"
-                                                       FontWeight="SemiBold"
-                                                       Foreground="#0F172A"
-                                                       TextWrapping="Wrap"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="34"/>
+                                            </Grid.ColumnDefinitions>
 
-                                            <TextBlock FontSize="12"
-                                                       Foreground="#64748B"
-                                                       Margin="0,4,0,0">
-                                                <TextBlock.Text>
-                                                    <MultiBinding StringFormat="{}{0} / {1} fiszek">
-                                                        <Binding Path="ReviewedFlashcardsCount"/>
-                                                        <Binding Path="TotalFlashcardsCount"/>
-                                                    </MultiBinding>
-                                                </TextBlock.Text>
-                                            </TextBlock>
+                                            <StackPanel Grid.Column="0"
+                                        Margin="0,0,10,0">
 
-                                            <ProgressBar Height="8"
-                                                         Minimum="0"
-                                                         Maximum="{Binding TotalFlashcardsCount}"
-                                                         Value="{Binding ReviewedFlashcardsCount}"
-                                                         Margin="0,8,0,0"
-                                                         Foreground="#2563EB"
-                                                         Background="#E2E8F0"/>
-                                        </StackPanel>
+                                                <TextBlock Text="{Binding FlashcardSetName}"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="#0F172A"
+                                           TextWrapping="Wrap"/>
+
+                                                <TextBlock FontSize="12"
+                                           Foreground="#64748B"
+                                           Margin="0,4,0,0">
+                                                    <TextBlock.Text>
+                                                        <MultiBinding StringFormat="{}{0} / {1} fiszek">
+                                                            <Binding Path="ReviewedFlashcardsCount"/>
+                                                            <Binding Path="TotalFlashcardsCount"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+
+                                                <ProgressBar Height="8"
+                                             Minimum="0"
+                                             Maximum="{Binding TotalFlashcardsCount}"
+                                             Value="{Binding ReviewedFlashcardsCount}"
+                                             Margin="0,8,0,0"
+                                             Foreground="#2563EB"
+                                             Background="#E2E8F0"/>
+                                            </StackPanel>
+
+                                            <Button Grid.Column="1"
+                                    Content="✕"
+                                    Width="30"
+                                    Height="30"
+                                    Tag="{Binding Id}"
+                                    Background="#FEE2E2"
+                                    Foreground="#DC2626"
+                                    BorderThickness="0"
+                                    FontWeight="Bold"
+                                    Cursor="Hand"
+                                    ToolTip="Zakończ sesję"
+                                    Click="CloseActiveSessionButton_Click">
+                                                <Button.Template>
+                                                    <ControlTemplate TargetType="Button">
+                                                        <Border Background="{TemplateBinding Background}"
+                                                CornerRadius="10">
+                                                            <ContentPresenter HorizontalAlignment="Center"
+                                                              VerticalAlignment="Center"/>
+                                                        </Border>
+
+                                                        <ControlTemplate.Triggers>
+                                                            <Trigger Property="IsMouseOver" Value="True">
+                                                                <Setter Property="Opacity" Value="0.82"/>
+                                                            </Trigger>
+
+                                                            <Trigger Property="IsEnabled" Value="False">
+                                                                <Setter Property="Opacity" Value="0.45"/>
+                                                            </Trigger>
+                                                        </ControlTemplate.Triggers>
+                                                    </ControlTemplate>
+                                                </Button.Template>
+                                            </Button>
+                                        </Grid>
                                     </Border>
 
                                 </DataTemplate>

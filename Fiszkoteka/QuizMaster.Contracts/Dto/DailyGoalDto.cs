@@ -9,7 +9,18 @@ namespace QuizMaster.Contracts.Dto
     public sealed class DailyGoalDto
     {
         public int TargetFlashcardsCount { get; set; }
-        public int ReviewedFlashcardsCount { get; set; }
+        private int _revewedFlashcardsCount;
+        public int ReviewedFlashcardsCount
+        {
+            get
+            {
+                return Math.Min(30, _revewedFlashcardsCount);
+            }
+            set
+            {
+                _revewedFlashcardsCount = value;
+            }
+        }
 
         public int ProgressPercent
         {

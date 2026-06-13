@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using QuizMaster.Contracts.Commands.Learning;
 using QuizMaster.Contracts.Dto;
+using QuizMaster.Core.Dto;
 using QuizMaster.Wpf.Interfaces;
 using QuizMaster.Wpf.Windows;
 using System;
@@ -94,6 +96,129 @@ namespace QuizMaster.Wpf.Views
             }
             catch (Exception ex)
             {
+                _messageDialogService.ShowError(
+                    "Błąd",
+                    ex.Message,
+                    Window.GetWindow(this));
+            }
+        }
+
+        private async void ActiveSessionCard_MouseLeftButtonUp(
+            object sender,
+            MouseButtonEventArgs e)
+        {
+            if (sender is not FrameworkElement element)
+                return;
+
+            if (element.Tag is not int sessionId)
+                return;
+
+            try
+            {
+                var learningSessionWindow = _serviceProvider
+                    .GetRequiredService<LearningSessionWindow>();
+
+                learningSessionWindow.Owner = Window.GetWindow(this);
+
+                learningSessionWindow.Closed += async (_, _) =>
+                {
+                    await LoadDashboardAsync();
+
+                    var owner = Window.GetWindow(this);
+                    owner?.Activate();
+                };
+
+                await learningSessionWindow.InitializeAsync(sessionId);
+
+                learningSessionWindow.Show();
+            }
+            catch (Exception ex)
+            {
+                _messageDialogService.ShowError(
+                    "Błąd",
+                    ex.Message,
+                    Window.GetWindow(this));
+            }
+        }
+
+        private async void CloseActiveSessionButton_Click(
+            object sender,
+            RoutedEventArgs e)
+        {
+            e.Handled = true;
+
+            if (sender is not Button button)
+                return;
+
+            if (button.Tag is not int sessionId)
+                return;
+
+            try
+            {
+                button.IsEnabled = false;
+
+                await _apiClient.PostAsync(
+                    $"api/learning-session/{sessionId}/finish");
+
+                await LoadDashboardAsync();
+            }
+            catch (Exception ex)
+            {
+                button.IsEnabled = true;
+
+                _messageDialogService.ShowError(
+                    "Błąd",
+                    ex.Message,
+                    Window.GetWindow(this));
+            }
+        }
+
+        private async void LearnButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button)
+                return;
+
+            if (button.Tag is not int flashcardSetId)
+                return;
+
+            try
+            {
+                button.IsEnabled = false;
+                var oldContent = button.Content;
+                button.Content = "Start...";
+
+                var command = new StartLearningSessionCommand
+                {
+                    FlashcardSetId = flashcardSetId
+                };
+
+                var session = await _apiClient.PostAsync<StartLearningSessionCommand, LearningSessionDto>(
+                    "api/learning-session/start",
+                    command);
+
+                var learningSessionWindow = _serviceProvider
+                    .GetRequiredService<LearningSessionWindow>();
+
+                learningSessionWindow.Owner = Window.GetWindow(this);
+
+                learningSessionWindow.Closed += async (_, _) =>
+                {
+                    await LoadDashboardAsync();
+                    Window.GetWindow(this).Activate();
+                };
+
+                await learningSessionWindow.InitializeAsync(session.Id);
+
+                learningSessionWindow.Show();
+
+                button.Content = oldContent;
+                button.IsEnabled = true;
+            }
+            catch (Exception ex)
+            {
+                button.Content = "Ucz się";
+                button.IsEnabled = true;
+
                 _messageDialogService.ShowError(
                     "Błąd",
                     ex.Message,
