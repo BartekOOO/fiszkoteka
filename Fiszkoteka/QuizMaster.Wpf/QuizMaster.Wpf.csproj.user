@@ -35,5 +35,8 @@
     <Compile Update="Windows\EditFlashcardWindow.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Windows\LearningSessionWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 </Project>

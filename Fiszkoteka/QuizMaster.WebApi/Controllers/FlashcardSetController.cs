@@ -36,6 +36,20 @@ namespace QuizMaster.WebApi.Controllers
             return Ok(result);
         }
 
+        [HttpPost("{id:int}/Copy")]
+        [ProducesResponseType(typeof(CopiedFlashcardSetDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> CopyFlashcardSet(
+            int id,
+            CancellationToken cancellationToken)
+        {
+            var result = await _flashcardSetService.CopyFlashcardSet(
+                id,
+                this.GetCurrentUserId(),
+                cancellationToken);
+
+            return Ok(result);
+        }
+
         [HttpGet]
         [ProducesResponseType(typeof(List<FlashcardSetListItemDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetFlashcardSets(
@@ -58,6 +72,7 @@ namespace QuizMaster.WebApi.Controllers
             var result = await _flashcardSetService.GetPublicFlashcardSets(
                 byUserName,
                 byCategory,
+                this.GetCurrentUserId(),
                 cancellationToken);
             return Ok(result);
         }
@@ -91,20 +106,7 @@ namespace QuizMaster.WebApi.Controllers
 
             return Ok();
         }
-
-        [HttpPut("{id:int}/Copy")]
-        [ProducesResponseType(typeof(CopiedFlashcardSetDto), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CopyFlashcardSet(
-            int id,
-            CancellationToken cancellationToken)
-        {
-            var result = await _flashcardSetService.CopyFlashcardSet(
-                id,
-                this.GetCurrentUserId(),
-                cancellationToken);
-
-            return Ok(result);
-        }
+  
 
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteFlashcardSet(

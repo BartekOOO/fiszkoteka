@@ -1,0 +1,174 @@
+﻿<Window x:Class="QuizMaster.Wpf.Windows.LearningSessionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Sesja nauki"
+        Width="500"
+        Height="610"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="#F8FAFC">
+
+    <Window.Resources>
+
+        <Style x:Key="LearningButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="46"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+    </Window.Resources>
+
+    <Border Padding="28">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0"
+                        Margin="0,0,0,24">
+
+                <TextBlock Text="Sesja nauki"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Foreground="#0F172A"/>
+
+                <TextBlock x:Name="FlashcardSetNameTextBlock"
+                           Text="Zestaw fiszek"
+                           FontSize="15"
+                           Foreground="#64748B"
+                           Margin="0,6,0,0"
+                           TextWrapping="Wrap"/>
+            </StackPanel>
+
+            <!-- Card -->
+            <Grid Grid.Row="1">
+
+                <Border x:Name="CardBorder"
+                        Background="White"
+                        CornerRadius="22"
+                        Padding="26"
+                        Cursor="Hand"
+                        MouseLeftButtonUp="CardBorder_MouseLeftButtonUp"
+                        RenderTransformOrigin="0.5,0.5">
+
+                    <Border.RenderTransform>
+                        <ScaleTransform x:Name="CardScaleTransform"
+                                        ScaleX="1"
+                                        ScaleY="1"/>
+                    </Border.RenderTransform>
+
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="28"
+                                          ShadowDepth="0"
+                                          Opacity="0.13"/>
+                    </Border.Effect>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock x:Name="CardSideTextBlock"
+                                   Text="Pytanie"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#2563EB"/>
+
+                        <TextBlock x:Name="CardTextBlock"
+                                   Grid.Row="1"
+                                   Text="Kliknij, aby rozpocząć"
+                                   FontSize="26"
+                                   FontWeight="Bold"
+                                   Foreground="#0F172A"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"/>
+
+                        <StackPanel Grid.Row="2"
+            Margin="0,18,0,0">
+
+                            <Button x:Name="ShowHintButton"
+            Content="Podpowiedź"
+            Background="Transparent"
+            BorderThickness="0"
+            Foreground="#2563EB"
+            FontSize="13"
+            FontWeight="SemiBold"
+            Cursor="Hand"
+            HorizontalAlignment="Center"
+            Click="ShowHintButton_Click"/>
+
+                            <TextBlock x:Name="HintTextBlock"
+               Text=""
+               FontSize="13"
+               Foreground="#94A3B8"
+               TextWrapping="Wrap"
+               TextAlignment="Center"
+               HorizontalAlignment="Center"
+               Margin="0,6,0,0"
+               Visibility="Collapsed"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <!-- Answer buttons -->
+            <Grid Grid.Row="2"
+                  Margin="0,24,0,0">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="14"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="WrongButton"
+                        Grid.Column="0"
+                        Content="✕  Źle"
+                        Background="#FEE2E2"
+                        Foreground="#DC2626"
+                        Style="{StaticResource LearningButtonStyle}"
+                        Click="WrongButton_Click"/>
+
+                <Button x:Name="CorrectButton"
+                        Grid.Column="2"
+                        Content="✓  Dobrze"
+                        Background="#DCFCE7"
+                        Foreground="#15803D"
+                        Style="{StaticResource LearningButtonStyle}"
+                        Click="CorrectButton_Click"/>
+            </Grid>
+
+            <!-- Progress -->
+            <StackPanel Grid.Row="3"
+                        Margin="0,24,0,0">
+
+                <ProgressBar x:Name="SessionProgressBar"
+                             Height="10"
+                             Minimum="0"
+                             Maximum="1"
+                             Value="0"
+                             Foreground="#2563EB"
+                             Background="#E2E8F0"/>
+
+                <TextBlock x:Name="ProgressTextBlock"
+                           Text="0 / 0 fiszek"
+                           FontSize="13"
+                           Foreground="#64748B"
+                           HorizontalAlignment="Right"
+                           Margin="0,8,0,0"/>
+            </StackPanel>
+
+        </Grid>
+    </Border>
+</Window>

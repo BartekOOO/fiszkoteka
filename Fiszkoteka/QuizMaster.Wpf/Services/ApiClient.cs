@@ -102,6 +102,22 @@ namespace QuizMaster.Wpf.Services
             return await ReadAsync<TResponse>(response, cancellationToken);
         }
 
+        public async Task<TResponse> PutAsync<TResponse>(
+            string path,
+            CancellationToken cancellationToken = default)
+        {
+            SetAuthorizationHeader();
+
+            var response = await _httpClient.PutAsync(
+                path,
+                null,
+                cancellationToken);
+
+            await EnsureSuccessAsync(response, cancellationToken);
+
+            return await ReadAsync<TResponse>(response, cancellationToken);
+        }
+
         public async Task PutAsync<TRequest>(
             string path,
             TRequest payload,
@@ -170,6 +186,20 @@ namespace QuizMaster.Wpf.Services
 
             _httpClient.DefaultRequestHeaders.Authorization =
                 new AuthenticationHeaderValue("Bearer", _appSession.Token);
+        }
+
+        public async Task<TResponse> PostAsync<TResponse>(string path, CancellationToken cancellationToken = default)
+        {
+            SetAuthorizationHeader();
+
+            var response = await _httpClient.PostAsync(
+                path,
+                null,
+                cancellationToken);
+
+            await EnsureSuccessAsync(response, cancellationToken);
+
+            return await ReadAsync<TResponse>(response, cancellationToken);
         }
     }
 }

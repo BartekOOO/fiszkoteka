@@ -10,6 +10,76 @@
 
     <Window.Resources>
 
+        <Style x:Key="ModernSwitchCheckBoxStyle" TargetType="CheckBox">
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="CheckBox">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="10"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border x:Name="SwitchBackground"
+                            Grid.Column="0"
+                            Width="46"
+                            Height="24"
+                            CornerRadius="12"
+                            Background="#CBD5E1">
+
+                                <Border x:Name="SwitchThumb"
+                                Width="18"
+                                Height="18"
+                                CornerRadius="9"
+                                Background="White"
+                                HorizontalAlignment="Left"
+                                Margin="3,0,0,0"/>
+                            </Border>
+
+                            <ContentPresenter Grid.Column="2"
+                                      VerticalAlignment="Center"
+                                      RecognizesAccessKey="True"/>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="SwitchBackground"
+                                Property="Background"
+                                Value="#2563EB"/>
+
+                                <Setter TargetName="SwitchThumb"
+                                Property="HorizontalAlignment"
+                                Value="Right"/>
+
+                                <Setter TargetName="SwitchThumb"
+                                Property="Margin"
+                                Value="0,0,3,0"/>
+                            </Trigger>
+
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="SwitchBackground"
+                                Property="Opacity"
+                                Value="0.85"/>
+                            </Trigger>
+
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="SwitchBackground"
+                                Property="Opacity"
+                                Value="0.5"/>
+                                <Setter Property="Foreground"
+                                Value="#94A3B8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <Style x:Key="InputTextBoxStyle" TargetType="TextBox">
             <Setter Property="Height" Value="40"/>
             <Setter Property="FontSize" Value="14"/>
@@ -305,6 +375,7 @@
                             </DataTemplate>
                         </ComboBox.ItemTemplate>
                     </ComboBox>
+                    
                     <!-- Opis -->
                     <TextBlock Grid.Row="3"
                                Grid.Column="0"
@@ -317,9 +388,17 @@
 
                     <TextBox Grid.Row="4"
                              Grid.Column="0"
-                             Grid.ColumnSpan="2"
+                             Grid.ColumnSpan="1"
                              x:Name="DescriptionTextBox"
                              Style="{StaticResource MultilineTextBoxStyle}"/>
+
+                    <CheckBox Grid.Row="5"
+                        Grid.Column="1"
+                        x:Name="IsPublicCheckBox"
+                        Content="Zestaw publiczny"
+                        Style="{StaticResource ModernSwitchCheckBoxStyle}"
+                        Margin="15,0,0,0"
+                        VerticalAlignment="Center"/>
                 </Grid>
             </Grid>
         </Border>

@@ -24,9 +24,17 @@ namespace QuizMaster.Wpf.Interfaces
             string path,
             CancellationToken cancellationToken = default);
 
+        Task<TResponse> PostAsync<TResponse>(
+            string path,
+            CancellationToken cancellationToken = default);
+
         Task<TResponse> PutAsync<TRequest, TResponse>(
             string path,
             TRequest payload,
+            CancellationToken cancellationToken = default);
+
+        Task<TResponse> PutAsync<TResponse>(
+            string path,
             CancellationToken cancellationToken = default);
 
         Task PutAsync<TRequest>(

@@ -86,6 +86,7 @@ namespace QuizMaster.Wpf.Windows
             NameTextBox.Text = _flashcardSet.Name;
             DescriptionTextBox.Text = _flashcardSet.Description;
             CategoryComboBox.SelectedValue = _flashcardSet.CategoryId;
+            IsPublicCheckBox.IsChecked = _flashcardSet.IsPublic;
 
             _flashcards.Clear();
 
@@ -129,7 +130,8 @@ namespace QuizMaster.Wpf.Windows
             {
                 Name = name,
                 Description = description,
-                CategoryId = (int)CategoryComboBox.SelectedValue
+                CategoryId = (int)CategoryComboBox.SelectedValue,
+                IsPublic = IsPublicCheckBox.IsChecked
             };
 
             await _apiClient.PutAsync(
@@ -183,6 +185,8 @@ namespace QuizMaster.Wpf.Windows
             window.InitializeData(flashcardSetId: _flashcardSetId);
 
             window.Owner = this;
+
+            window.Closed += (_, _) => this.Activate();
 
             window.OnCreatedFlashcard += async (s, c, i) =>
             {
@@ -244,28 +248,13 @@ namespace QuizMaster.Wpf.Windows
             {
                 try
                 {
-                    //var command = new UpdateFlashcardCommand
-                    //{
-                    //    Question = window.Question,
-                    //    Answer = window.Answer,
-                    //    Hint = window.Hint,
-                    //    Difficulty = window.Difficulty
-                    //};
+                    await _apiClient.PutAsync(
+                        $"api/flashcard/{flashcardId}", f);
 
-                    //await _apiClient.PutAsync(
-                    //    $"api/flashcard/{flashcardId}",
-                    //    command);
-
-                    //item.Question = window.Question;
-                    //item.Answer = window.Answer;
-                    //item.Hint = window.Hint;
-                    //item.Difficulty = window.Difficulty;
-
-                    return true;
-
+                    await LoadFlashcardSetAsync();
                     FlashcardsItemsControl.Items.Refresh();
 
-                    Saved?.Invoke(this);
+                    return true; 
                 }
                 catch (Exception ex)
                 {

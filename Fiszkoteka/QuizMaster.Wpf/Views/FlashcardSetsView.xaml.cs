@@ -87,7 +87,7 @@ namespace QuizMaster.Wpf.Views
                     <CreateFlashcardSetWindow>();
 
                 createFlashcardSetWindow.Owner = Window.GetWindow(this);
-                createFlashcardSetWindow.Closed += (_, _) => Window.GetWindow(this).Owner.Activate();
+                createFlashcardSetWindow.Closed += (_, _) => Window.GetWindow(this).Activate();
 
                 createFlashcardSetWindow.OnCreatedFlashcardSet += async (sender, id) =>
                 {

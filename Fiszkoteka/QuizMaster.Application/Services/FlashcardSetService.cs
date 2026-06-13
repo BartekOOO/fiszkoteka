@@ -61,7 +61,8 @@ namespace QuizMaster.Application.Services
                 {
                     Question = x.Question,
                     Answer = x.Answer,
-                    FlashcardSetId = copiedSet.Id
+                    FlashcardSetId = copiedSet.Id,
+                    Hint = x.Hint ?? ""
                 })
                 .ToList();
 
@@ -188,11 +189,12 @@ namespace QuizMaster.Application.Services
         public async Task<List<FlashcardSetListItemDto>> GetPublicFlashcardSets(
             string? userName,
             string? categoryName,
+            int userId,
             CancellationToken cancellationToken)
         {
             var setsQuery = _context.FlashcardSets
                 .AsNoTracking()
-                .Where(x => x.IsPublic);
+                .Where(x => x.IsPublic && x.UserId != userId);
 
             if (userName is not null)
             {
