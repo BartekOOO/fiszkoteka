@@ -74,7 +74,7 @@ namespace QuizMaster.Wpf.Views
                     <CreateFlashcardSetWindow>();
 
                 createFlashcardSetWindow.Owner = Window.GetWindow(this);
-                createFlashcardSetWindow.Closed += (_, _) => Window.GetWindow(this).Activate();
+                createFlashcardSetWindow.Closed += (_, _) => Window.GetWindow(this)?.Activate();
 
                 createFlashcardSetWindow.OnCreatedFlashcardSet += async (sender, id) =>
                 {
@@ -204,7 +204,7 @@ namespace QuizMaster.Wpf.Views
                 learningSessionWindow.Closed += async (_, _) =>
                 {
                     await LoadDashboardAsync();
-                    Window.GetWindow(this).Activate();
+                    Window.GetWindow(this)?.Activate();
                 };
 
                 await learningSessionWindow.InitializeAsync(session.Id);
